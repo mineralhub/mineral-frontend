@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import {login} from '../../actions/app';
 import {AccountLink} from '../../common/Links';
+import {Link} from "react-router-dom";
 
 class Header extends Component {
   constructor(props) {
@@ -101,14 +102,14 @@ class Header extends Component {
   render() {
     return (
       <nav className="navbar navbar-expand-md navbar-dark bg-dark">
-        <a className="navbar-brand" href="/">Mineral Explorer</a>
+        <Link to='/' className="navbar-brand">Mineral Explorer</Link>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse dual-collapse2">
           <ul className="nav navbar-nav">
             <li className="nav-item">
-              <a className="nav-link" href="/">Home</a>
+              <Link to='/' className="nav-link">Home</Link>
             </li>
           </ul>
         </div>

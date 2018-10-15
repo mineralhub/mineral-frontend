@@ -1,14 +1,14 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 
-export const TransactionLink = ({hash, text}) => (
+export const TransactionLink = ({hash, text=hash}) => (
   <Link to={`/transaction/${hash}`}>{text}</Link>
 );
 
-export const BlockLink = ({hash, text}) => (
+export const BlockLink = ({hash, text=hash}) => (
   <Link to={`/block/${hash}`}>{text}</Link>
 );
 
-export const AccountLink = ({address, text}) => (
+export const AccountLink = ({address, text=address}) => (
   <Link to={`/account/${address}`}>{text}</Link>
 );

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './AccountContainer.css';
 import { SET_ACCOUNT_PENDING, SET_ACCOUNT_SUCCESS, SET_ACCOUNT_FAILURE, loadAccount } from '../actions/account';
+import { SET_TRANSACTIONS_FROM_ADDRESS_PENDING, SET_TRANSACTIONS_FROM_ADDRESS_SUCCESS, SET_TRANSACTIONS_FROM_ADDRESS_FAILURE, loadTransactionFromAddress } from '../actions/blockchain';
 import Account from '../components/Account/Account';
+import AccountTransactionList from '../components/Account/AccountTransactionList';
 
 export class AccountContainer extends Component {
   constructor(props) {
@@ -17,6 +19,22 @@ export class AccountContainer extends Component {
   load = async (address) => {
     const {dispatch} = this.props;
     dispatch(await loadAccount(address));
+    dispatch(await loadTransactionFromAddress(address, 1));
+  }
+
+  renderTransactions() {
+    let { setTransactionsFromAddress } = this.props;
+    if (setTransactionsFromAddress === SET_TRANSACTIONS_FROM_ADDRESS_PENDING) {
+      return (
+        <div>LOADING!</div>
+      );
+    } else if (setTransactionsFromAddress === SET_TRANSACTIONS_FROM_ADDRESS_SUCCESS) {
+      return (
+        <AccountTransactionList />
+      );
+    } else {
+      return <div></div>
+    }
   }
 
   render() {
@@ -30,6 +48,7 @@ export class AccountContainer extends Component {
         <div className="account">
           <div className="container">
             <Account />
+            {this.renderTransactions()}
           </div>
         </div>
       );
@@ -43,6 +62,7 @@ export class AccountContainer extends Component {
 function mapStateToProps(state) {
   return {
     setAccount: state.network.setAccount,
+    setTransactionsFromAddress: state.network.setTransactionsFromAddress,
     account: state.app.account
   };
 }

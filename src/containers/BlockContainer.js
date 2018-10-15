@@ -15,6 +15,12 @@ export class BlockContainer extends Component {
     this.load(match.params.hash);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location.key !== this.props.location.key) {
+      this.load(nextProps.match.params.hash);
+    }
+  }
+
   load = async (hash) => {
     const {dispatch} = this.props;
     dispatch(await loadBlock(hash));

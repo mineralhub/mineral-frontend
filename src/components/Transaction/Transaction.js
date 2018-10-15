@@ -13,7 +13,6 @@ class Transaction extends Component {
         <dd className="col col-sm-9">
           <AccountLink 
             address={AddressHashToAddress(transaction.data.from)} 
-            text={AddressHashToAddress(transaction.data.from)} 
           />
         </dd>
         <dt className="col col-sm-3">Reward:</dt>

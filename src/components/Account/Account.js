@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { LongToSatosi } from '../../common/Blockchain';
-import moment from 'moment';
 
 class Account extends Component {
   render() {

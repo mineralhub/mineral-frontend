@@ -1,5 +1,6 @@
 import { SET_TRANSACTION_PENDING, SET_TRANSACTION_FAILURE, SET_TRANSACTION_SUCCESS, 
-  SET_BLOCK_PENDING, SET_BLOCK_FAILURE, SET_BLOCK_SUCCESS } from "../actions/blockchain";
+  SET_BLOCK_PENDING, SET_BLOCK_FAILURE, SET_BLOCK_SUCCESS,
+  SET_TRANSACTIONS_FROM_ADDRESS_PENDING, SET_TRANSACTIONS_FROM_ADDRESS_FAILURE, SET_TRANSACTIONS_FROM_ADDRESS_SUCCESS } from "../actions/blockchain";
 import { SET_ACCOUNT_PENDING, SET_ACCOUNT_FAILURE, SET_ACCOUNT_SUCCESS } from "../actions/account";
 
 const initialState = {
@@ -25,6 +26,15 @@ export function network(state = initialState, action) {
       return {
         ...state,
         setBlock: action.type
+      }
+    }
+
+    case SET_TRANSACTIONS_FROM_ADDRESS_PENDING:
+    case SET_TRANSACTIONS_FROM_ADDRESS_FAILURE:
+    case SET_TRANSACTIONS_FROM_ADDRESS_SUCCESS: {
+      return {
+        ...state,
+        setTransactionsFromAddress: action.type
       }
     }
 

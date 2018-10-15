@@ -7,6 +7,11 @@ export const SET_TRANSACTION_SUCCESS = 'SET_TRANSACTION_SUCCESS';
 export const SET_TRANSACTION_FAILURE = 'SET_TRANSACTION_FAILURE';
 export const SET_TRANSACTION = 'SET_TRANSACTION';
 
+export const SET_TRANSACTIONS_FROM_ADDRESS_PENDING = 'SET_TRANSACTIONS_FROM_ADDRESS_PENDING';
+export const SET_TRANSACTIONS_FROM_ADDRESS_SUCCESS = 'SET_TRANSACTIONS_FROM_ADDRESS_SUCCESS';
+export const SET_TRANSACTIONS_FROM_ADDRESS_FAILURE = 'SET_TRANSACTIONS_FROM_ADDRESS_FAILURE';
+export const SET_TRANSACTIONS_FROM_ADDRESS = 'SET_TRANSACTIONS_FROM_ADDRESS';
+
 export const SET_BLOCK_PENDING = 'SET_BLOCK_PENDING';
 export const SET_BLOCK_SUCCESS = 'SET_BLOCK_SUCCESS';
 export const SET_BLOCK_FAILURE = 'SET_BLOCK_FAILURE';
@@ -37,6 +42,23 @@ export const setTransactionSuccess = () => ({
 
 export const setTransactionFailure = () => ({
 	type: SET_TRANSACTION_FAILURE
+});
+
+export const setTransactionsFromAddress = (transactions) => ({
+	type: SET_TRANSACTIONS_FROM_ADDRESS,
+	transactions
+});
+
+export const setTransactionsFromAddressPending = () => ({
+	type: SET_TRANSACTIONS_FROM_ADDRESS_PENDING
+});
+
+export const setTransactionsFromAddressSuccess = () => ({
+	type: SET_TRANSACTIONS_FROM_ADDRESS_SUCCESS
+});
+
+export const setTransactionsFromAddressFailure = () => ({
+	type: SET_TRANSACTIONS_FROM_ADDRESS_FAILURE
 });
 
 export const setBlock = (block) => ({
@@ -81,6 +103,19 @@ export const loadTransaction = (hash) => {
 				dispatch(setTransactionSuccess());
 			}).catch((error) => {
 				dispatch(setTransactionFailure());
+			});
+	}
+}
+
+export const loadTransactionFromAddress = (address, page) => {
+	return (dispatch) => {
+		dispatch(setTransactionsFromAddressPending());
+		axios.get(`http://127.0.0.1:80/transaction/${address}/${page}`)
+			.then((response) => {
+				dispatch(setTransactionsFromAddress(response.data));
+				dispatch(setTransactionsFromAddressSuccess());
+			}).catch((error) => {
+				dispatch(setTransactionsFromAddressFailure());
 			});
 	}
 }

@@ -1,4 +1,4 @@
-import { SET_BLOCKS, SET_TRANSACTIONS, SET_TRANSACTION, SET_BLOCK	} from '../actions/blockchain';
+import { SET_BLOCKS, SET_TRANSACTIONS, SET_TRANSACTION, SET_BLOCK, SET_TRANSACTIONS_FROM_ADDRESS	} from '../actions/blockchain';
 
 const initialState = {
 	blocks: []
@@ -30,6 +30,13 @@ export function blockchain(state = initialState, action) {
 			return {
 				...state,
 				block: action.block,
+			}
+		}
+
+		case SET_TRANSACTIONS_FROM_ADDRESS: {
+			return {
+				...state,
+				addressTransactions: action.transactions
 			}
 		}
 		
