@@ -1,0 +1,11 @@
+.transaction {
+  width: 50rem;
+  margin: 0 auto;
+  margin-top: 1rem;
+}
+
+@media (max-wiedth: 768px) {
+  .transaction {
+    width: 100%;
+  }
+}
