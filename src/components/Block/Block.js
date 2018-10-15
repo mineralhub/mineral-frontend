@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import moment from 'moment';
 
-class BlockDetail extends Component {
+class Block extends Component {
   render() {
     let { block } = this.props;
     console.log(block);
@@ -39,4 +39,4 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BlockDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(Block);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { TransactionDetail } from '../components';
+import { Transaction } from '../components';
 import { loadTransaction,
   SET_TRANSACTION_PENDING, SET_TRANSACTION_SUCCESS, SET_TRANSACTION_FAILURE } from '../actions/blockchain';
 import './TransactionContainer.css';
@@ -30,7 +30,7 @@ export class TransactionContainer extends Component {
       return (
         <div className="transaction">
           <div className="container">
-            <TransactionDetail />
+            <Transaction />
           </div>
         </div>
       );

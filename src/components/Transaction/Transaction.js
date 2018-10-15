@@ -5,7 +5,7 @@ import { AddressHashToAddress } from '../../common/Blockchain';
 import { AccountLink } from '../../common/Links';
 import moment from 'moment';
 
-class TransactionDetail extends Component {
+class Transaction extends Component {
   renderRewardTransaction = (transaction) => {
     return (
       <dl className="row">
@@ -67,4 +67,4 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TransactionDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(Transaction);

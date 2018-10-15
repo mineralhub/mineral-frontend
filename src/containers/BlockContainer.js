@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { BlockDetail } from '../components';
+import { Block } from '../components';
 import { loadBlock,
   SET_BLOCK_PENDING, SET_BLOCK_SUCCESS, SET_BLOCK_FAILURE } from '../actions/blockchain';
 import './BlockContainer.css';
@@ -30,7 +30,7 @@ export class BlockContainer extends Component {
       return (
         <div className="block">
           <div className="container">
-            <BlockDetail />
+            <Block />
           </div>
         </div>
       );
