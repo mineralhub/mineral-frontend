@@ -45,11 +45,9 @@ export class AccountContainer extends Component {
       );
     } else if (setAccount === SET_ACCOUNT_SUCCESS) {
       return (
-        <div className="account">
-          <div className="container">
-            <Account />
-            {this.renderTransactions()}
-          </div>
+        <div className="container account">
+          <Account />
+          {this.renderTransactions()}
         </div>
       );
     } else if (setAccount === SET_ACCOUNT_FAILURE) {

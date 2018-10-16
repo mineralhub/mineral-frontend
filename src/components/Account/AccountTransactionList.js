@@ -1,33 +1,52 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { LongToSatosi } from '../../common/Blockchain';
+import { LongToSatosi, AddressHashToAddress } from '../../common/Blockchain';
 import moment from 'moment';
-import { TransactionLink } from '../../common/Links';
+import { TransactionLink, AccountLink } from '../../common/Links';
 
 class AccountTransactionList extends Component {
+  renderRewardTransaction = (tx, index) => {
+    return (
+      <tr key={index}>
+        <td scope="row">
+          <TransactionLink hash={tx.hash} text={tx.hash.substr(0, 20) + '...'} />
+        </td>
+        <td>{moment.unix(tx.created_time).fromNow()}</td>
+        <td>-</td>
+        <td><AccountLink
+            address={AddressHashToAddress(tx.data.from)} 
+          />
+        </td>
+        <td>{LongToSatosi(tx.data.reward)}</td>
+      </tr>
+    )
+  }
+
+  renderTransaction = (tx, index) => {
+    switch (tx.type) {
+      case 1:
+        return this.renderRewardTransaction(tx, index);
+      case 2:
+    }
+    return (<div></div>);
+  }
+
   render() {
     let { transactions } = this.props;
-    console.log(transactions);
     return (
       <table className="table">
         <thead className="thead-dark">
           <tr>
             <th scope="col">Hash</th>
             <th scope="col">Age</th>
+            <th scope="col">From</th>
+            <th scope="col">To</th>
+            <th scope="col">Amount</th>
           </tr>
         </thead>
         <tbody>
           {
-            transactions.map((tx, index) => {
-              return (
-                <tr key={index}>
-                  <td scope="row">
-                  <TransactionLink hash={tx.hash} text={tx.hash.substr(0, 20)+'...'} />
-                  </td>
-                  <td>{moment.unix(tx.created_time).fromNow()}</td>
-                </tr>
-              );
-            })
+            transactions.map(this.renderTransaction)
           }
         </tbody>
       </table>

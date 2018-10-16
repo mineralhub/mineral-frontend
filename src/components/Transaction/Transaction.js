@@ -26,7 +26,6 @@ class Transaction extends Component {
       case 1:
       return this.renderRewardTransaction(transaction);
       case 2:
-
     }
     return (<div></div>);
   }

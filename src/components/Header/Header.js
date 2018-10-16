@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import {login} from '../../actions/app';
-import {AccountLink} from '../../common/Links';
+import {AccountLink, CreateAccountLink} from '../../common/Links';
 import {Link} from "react-router-dom";
 
 class Header extends Component {
@@ -39,6 +39,9 @@ class Header extends Component {
       return false;
     }
     return true;
+  }
+
+  onClickCreateAccount = () => {
   }
 
   renderAccount = () => {
@@ -88,8 +91,9 @@ class Header extends Component {
                     className="btn btn-primary btn-block mt-3"
                     disabled={!this.isLoginValid()}
                     onClick={this.onClickLogin}>
-                    Submit
+                    Login
                     </button>
+                  <CreateAccountLink />
                 </li>
               </ul>
             </li>

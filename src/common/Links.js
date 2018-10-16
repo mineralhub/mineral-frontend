@@ -12,3 +12,7 @@ export const BlockLink = ({hash, text=hash}) => (
 export const AccountLink = ({address, text=address}) => (
   <Link to={`/account/${address}`}>{text}</Link>
 );
+
+export const CreateAccountLink = ({text='Create Account'}) => (
+  <Link className="btn btn-primary btn-block" to="/account/new">{text}</Link>
+);
