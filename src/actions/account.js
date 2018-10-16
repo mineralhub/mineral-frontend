@@ -7,14 +7,15 @@ export const SET_ACCOUNT_PENDING = 'SET_ACCOUNT_PENDING';
 export const SET_ACCOUNT_SUCCESS = 'SET_ACCOUNT_SUCCESS';
 export const SET_ACCOUNT_FAILURE = 'SET_ACCOUNT_FAILURE';
 
-export const setBalance = (wallet) => ({
+export const setBalance = (balance) => ({
   type: SET_BALANCE,
-  wallet
+  balance
 });
 
-export const setAccount = (account) => ({
+export const setAccount = (address, account) => ({
   type: SET_ACCOUNT,
-  account
+  account,
+  address
 });
 
 export const setAccountPending = () => ({
@@ -43,7 +44,7 @@ export const loadAccount = (address) => {
     console.log(address);
 		axios.get(`http://127.0.0.1:80/account/${address}`)
 			.then((response) => {
-				dispatch(setAccount(response.data));
+				dispatch(setAccount(address, response.data));
 				dispatch(setAccountSuccess());
 			}).catch((error) => {
 				dispatch(setAccountFailure());

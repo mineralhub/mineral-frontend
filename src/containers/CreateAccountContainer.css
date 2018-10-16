@@ -2,3 +2,11 @@
   margin: 0 auto;
   margin-top: 1rem;
 }
+
+.ReactPasswordStrength-input {
+  display: block;
+}
+
+.ReactPasswordStrength-strength-desc {
+  margin-right: 10px;
+}

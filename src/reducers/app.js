@@ -1,6 +1,6 @@
 import { publicKeyCreate, privateKeyVerify } from 'secp256k1';
-import { LOGIN_WITH_PRIVATE_KEY } from '../actions/app';
-import { PubKeyToAddress } from '../common/Blockchain';
+import { LOGIN_WITH_PRIVATE_KEY, LOGOUT } from '../actions/app';
+import { getAddressFromPubKey } from '../common/Blockchain';
 
 const initialState = {
   account: {
@@ -18,9 +18,15 @@ export function app(state = initialState, action) {
         ...state,
         account: {
           key: action.privateKey,
-          address: PubKeyToAddress(publicKeyCreate(Buffer.from(action.privateKey, 'hex'), false)),
+          address: getAddressFromPubKey(publicKeyCreate(Buffer.from(action.privateKey, 'hex'), false)),
           isLoggedIn: true
         }
+      }
+    }
+    case LOGOUT: {
+      return {
+        ...state,
+        account: initialState.account
       }
     }
     default:

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import {login} from '../../actions/app';
+import { login, logout } from '../../actions/app';
 import {AccountLink, CreateAccountLink} from '../../common/Links';
 import {Link} from "react-router-dom";
+import { toast } from 'react-toastify';
 
 class Header extends Component {
   constructor(props) {
@@ -30,7 +31,9 @@ class Header extends Component {
 
   onClickLogin = () => {
     let {privateKey} = this.state;
-    this.props.login(privateKey);
+    this.props.login(privateKey).then(() => {
+      toast.success("Success Login", {position: toast.POSITION.BOTTOM_RIGHT});
+    });
   }
 
   isLoginValid = () => {
@@ -41,7 +44,13 @@ class Header extends Component {
     return true;
   }
 
-  onClickCreateAccount = () => {
+  onClickLogout = () => {
+    this.props.logout();
+    this.setState({
+      privateKey: ''
+    });
+
+    toast.success("Success Logout", {position: toast.POSITION.BOTTOM_RIGHT});
   }
 
   renderAccount = () => {
@@ -60,7 +69,7 @@ class Header extends Component {
                   <button
                     type="button"
                     className="btn btn-primary btn-block mt-3"
-                    onClick={this.onClickLogin}>
+                    onClick={this.onClickLogout}>
                     Logout
                 </button>
                 </li>
@@ -130,6 +139,7 @@ function mapStateToProps(state) {
 };
 
 const mapDispatchToProps = {
-  login
+  login,
+  logout
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

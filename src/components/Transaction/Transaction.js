@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { getTxTypeString, LongToSatosi } from '../../common/Blockchain';
-import { AddressHashToAddress } from '../../common/Blockchain';
+import { getTxTypeString, lognToSatosi } from '../../common/Blockchain';
+import { getAddressFromAddressHash } from '../../common/Blockchain';
 import { AccountLink } from '../../common/Links';
 import moment from 'moment';
 
@@ -12,11 +12,11 @@ class Transaction extends Component {
         <dt className="col col-sm-3">From:</dt>
         <dd className="col col-sm-9">
           <AccountLink 
-            address={AddressHashToAddress(transaction.data.from)} 
+            address={getAddressFromAddressHash(transaction.data.from)} 
           />
         </dd>
         <dt className="col col-sm-3">Reward:</dt>
-        <dd className="col col-sm-9">{LongToSatosi(transaction.data.reward)}</dd>
+        <dd className="col col-sm-9">{lognToSatosi(transaction.data.reward)}</dd>
       </dl>
     );
   }

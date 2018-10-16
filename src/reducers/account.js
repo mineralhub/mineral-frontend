@@ -10,7 +10,7 @@ export function account(state = initialState, action) {
     case SET_ACCOUNT: {
 			return {
 				...state,
-        address: action.account.address,
+        address: action.address,
         balance: action.account.balance
 			}
 		}

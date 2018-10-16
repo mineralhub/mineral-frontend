@@ -6,7 +6,6 @@ import { BlockLink } from '../../common/Links';
 class Block extends Component {
   render() {
     let { block } = this.props;
-    console.log(block);
     return (
       <div className="container">
         <dl className="row">

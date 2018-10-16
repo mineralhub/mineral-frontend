@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './CreateAccountContainer.css'
+import CreateAccount from '../components/Account/CreateAccount';
 
-export class CreateAccountContainer extends Component {
+class CreateAccountContainer extends Component {
   constructor(props) {
     super(props);
   }
 
   render() {
+    return (
+      <div className="container">
+        <div className="create-account">
+          <CreateAccount />
+        </div>
+      </div>
+    )
   }
 }
 
 function mapStateToProps(state) {
   return {
+    ...state
   };
 }
 

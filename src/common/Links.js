@@ -14,5 +14,5 @@ export const AccountLink = ({address, text=address}) => (
 );
 
 export const CreateAccountLink = ({text='Create Account'}) => (
-  <Link className="btn btn-primary btn-block" to="/account/new">{text}</Link>
+  <Link className="btn btn-primary btn-block" to="/account/create">{text}</Link>
 );

@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { LongToSatosi } from '../../common/Blockchain';
+import { lognToSatosi } from '../../common/Blockchain';
 
 class Account extends Component {
   render() {
     let { account } = this.props;
     return (
-      <div className="container">
-        <dl className="row">
-          <dt className="col col-sm-3">Address:</dt>
-          <dd className="col col-sm-9">{account.address}</dd>
-          <dt className="col col-sm-3">Balance:</dt>
-          <dd className="col col-sm-9">{LongToSatosi(account.balance)}</dd>
-        </dl>
-      </div>
+      <dl className="row">
+        <dt className="col col-sm-3">Address:</dt>
+        <dd className="col col-sm-9">{account.address}</dd>
+        <dt className="col col-sm-3">Balance:</dt>
+        <dd className="col col-sm-9">{lognToSatosi(account.balance)}</dd>
+      </dl>
     );
   }
 }
