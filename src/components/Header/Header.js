@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { login, logout } from '../../actions/app';
-import {AccountLink, CreateAccountLink} from '../../common/Links';
-import {longToSatosi} from '../../common/Blockchain';
-import {Link} from "react-router-dom";
+import { AccountLink, CreateAccountLink } from '../../common/Links';
+import { longToSatosi } from '../../common/Blockchain';
+import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 
 class Header extends Component {
@@ -31,14 +31,14 @@ class Header extends Component {
   }
 
   onClickLogin = () => {
-    let {privateKey} = this.state;
+    let { privateKey } = this.state;
     this.props.login(privateKey).then(() => {
-      toast.success("Success Login", {position: toast.POSITION.BOTTOM_RIGHT});
+      toast.success("Success Login", { position: toast.POSITION.BOTTOM_RIGHT });
     });
   }
 
   isLoginValid = () => {
-    let {privateKey} = this.state;
+    let { privateKey } = this.state;
     if (!privateKey || privateKey.length !== 64) {
       return false;
     }
@@ -46,7 +46,7 @@ class Header extends Component {
   }
 
   renderBalance = () => {
-    let {active} = this.props;
+    let { active } = this.props;
     if (active.balance != undefined) {
       return (
         <label>balance : {longToSatosi(active.balance)}</label>
@@ -64,7 +64,7 @@ class Header extends Component {
       privateKey: ''
     });
 
-    toast.success("Success Logout", {position: toast.POSITION.BOTTOM_RIGHT});
+    toast.success("Success Logout", { position: toast.POSITION.BOTTOM_RIGHT });
   }
 
   renderAccount = () => {
@@ -77,16 +77,18 @@ class Header extends Component {
               <button type="button" id="dropdownMenu1" data-toggle="dropdown" className="btn btn-outline-secondary dropdown-toggle">Account<span className="caret"></span></button>
               <ul className="dropdown-menu dropdown-menu-right mt-2" style={{ width: 320 }}>
                 <li className="px-3 py-2 mb-2">
-                  <small>
-                  <AccountLink address={account.address} text={account.address} />
-                  {this.renderBalance()}
-                  </small>
-                  <button
-                    type="button"
-                    className="btn btn-primary btn-block mt-3"
-                    onClick={this.onClickLogout}>
-                    Logout
+                  <div className="text-center">
+                    <small>
+                      <AccountLink address={account.address} text={account.address} />
+                      {this.renderBalance()}
+                    </small>
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-block mt-3"
+                      onClick={this.onClickLogout}>
+                      Logout
                 </button>
+                  </div>
                 </li>
               </ul>
             </li>

@@ -15,7 +15,9 @@ class TransactionList extends Component {
           return (
             <li key={index} className="list-group-item list-group-item-action flex-column align-items-start">
               <div className="d-flex w-100 justify-content-between">
-                <TransactionLink hash={tx.hash} text={tx.hash.substr(0, 15)+'...'} />
+                <span className="d-inline-block text-truncate" style={{maxWidth:"300px"}}>
+                  <TransactionLink hash={tx.hash} />
+                </span>
                 <small>{moment.unix(tx.timestamp).fromNow()}</small>
               </div>
               <p>{getTxTypeString(tx.type)}</p>

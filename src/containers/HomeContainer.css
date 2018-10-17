@@ -1,12 +1,6 @@
 .home {
-  width: 50rem;
   margin: 0 auto;
-}
-
-@media (max-wiedth: 768px) {
-  .home {
-    width: 100%;
-  }
+  margin-top: 1rem;
 }
 
 .viewbox {
