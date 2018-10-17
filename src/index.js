@@ -7,6 +7,7 @@ import moment from 'moment';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
+moment.relativeTimeThreshold('s', 59);
 moment.relativeTimeThreshold('ss', 1);
 
 ReactDOM.render(<App />, document.getElementById('root'));
