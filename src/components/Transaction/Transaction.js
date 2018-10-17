@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { getTxTypeString, longToSatosi } from '../../common/Blockchain';
 import { getAddressFromAddressHash } from '../../common/Blockchain';
-import { AccountLink } from '../../common/Links';
+import { TransactionLink, AccountLink } from '../../common/Links';
 import moment from 'moment';
 
 class Transaction extends Component {
@@ -39,7 +39,11 @@ class Transaction extends Component {
           <dt className="col col-sm-3">Type:</dt>
           <dd className="col col-sm-9">{getTxTypeString(transaction.type)}</dd>
           <dt className="col col-sm-3">Hash:</dt>
-          <dd className="col col-sm-9">{transaction.hash}</dd>
+          <dd className="col col-sm-9">
+            <TransactionLink
+              hash={transaction.hash}
+            />
+          </dd>
           <dt className="col col-sm-3">Version:</dt>
           <dd className="col col-sm-9">{transaction.version}</dd>
           <dt className="col col-sm-3">Block Height:</dt>
