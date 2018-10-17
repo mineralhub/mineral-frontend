@@ -6,12 +6,34 @@ import { getTxTypeString, getAddressFromAddressHash } from '../../common/Blockch
 import moment from 'moment';
 
 class TransactionList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      time: moment()
+    }
+  }
+
+  tick() {
+    this.setState({
+      time: moment()
+    })
+  }
+
+  componentDidMount() {
+    this.interval = setInterval(() => this.tick(), 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
   render() {
     let { transactions = [] } = this.props;
     return (
     <ul className="list-group">
       {
-        transactions.reverse().map((tx, index) => {
+        transactions.map((tx, index) => {
           return (
             <li key={index} className="list-group-item list-group-item-action flex-column align-items-start">
               <div className="d-flex w-100 justify-content-between">

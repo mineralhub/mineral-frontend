@@ -16,7 +16,8 @@ export class BlockContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.location.key !== this.props.location.key) {
+    if (nextProps.location.key !== this.props.location.key &&
+      nextProps.match.params.hash !== this.props.match.params.hash) {
       this.load(nextProps.match.params.hash);
     }
   }

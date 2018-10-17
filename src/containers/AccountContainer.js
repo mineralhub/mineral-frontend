@@ -17,7 +17,8 @@ export class AccountContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.location.key !== this.props.location.key) {
+    if (nextProps.location.key !== this.props.location.key &&
+      nextProps.match.params.address !== this.props.match.params.address) {
       this.load(nextProps.match.params.address);
     }
   }
