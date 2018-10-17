@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { lognToSatosi } from '../../common/Blockchain';
+import { longToSatosi } from '../../common/Blockchain';
 
 class Account extends Component {
   render() {
@@ -10,7 +10,7 @@ class Account extends Component {
         <dt className="col col-sm-3">Address:</dt>
         <dd className="col col-sm-9">{account.address}</dd>
         <dt className="col col-sm-3">Balance:</dt>
-        <dd className="col col-sm-9">{lognToSatosi(account.balance)}</dd>
+        <dd className="col col-sm-9">{longToSatosi(account.balance)}</dd>
       </dl>
     );
   }

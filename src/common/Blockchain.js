@@ -15,7 +15,7 @@ export const getTxTypeString = (tx) => {
   return "Uknown Transaction";
 }
 
-export const lognToSatosi = (v) => {
+export const longToSatosi = (v) => {
   if (0 < v)
     return Number(v / 100000000).toFixed(8);
   return Number(0).toFixed(8);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { lognToSatosi, getAddressFromAddressHash } from '../../common/Blockchain';
+import { longToSatosi, getAddressFromAddressHash } from '../../common/Blockchain';
 import moment from 'moment';
 import { TransactionLink, AccountLink } from '../../common/Links';
 
@@ -17,7 +17,7 @@ class AccountTransactionList extends Component {
             address={getAddressFromAddressHash(tx.data.from)} 
           />
         </td>
-        <td>{lognToSatosi(tx.data.reward)}</td>
+        <td>{longToSatosi(tx.data.reward)}</td>
       </tr>
     )
   }

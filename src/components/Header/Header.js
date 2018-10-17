@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { login, logout } from '../../actions/app';
 import {AccountLink, CreateAccountLink} from '../../common/Links';
-import {lognToSatosi} from '../../common/Blockchain';
+import {longToSatosi} from '../../common/Blockchain';
 import {Link} from "react-router-dom";
 import { toast } from 'react-toastify';
 
@@ -49,7 +49,7 @@ class Header extends Component {
     let {active} = this.props;
     if (active.balance != undefined) {
       return (
-        <label>balance : {lognToSatosi(active.balance)}</label>
+        <label>balance : {longToSatosi(active.balance)}</label>
       )
     } else {
       return (
