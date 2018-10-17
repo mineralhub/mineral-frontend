@@ -1,4 +1,4 @@
-import {loadBalance} from './account';
+import {setActiveAccount, loadBalance} from './account';
 
 export const LOGIN_WITH_PRIVATE_KEY = 'LOGIN_WITH_PRIVATE_KEY';
 export const LOGOUT = 'LOGOUT';
@@ -12,7 +12,10 @@ export const logout = () => ({
   type: LOGOUT
 });
 
-export const login = (privateKey) => async (dispatch, getstate) => {
+export const login = (privateKey) => async (dispatch, getState) => {
   await dispatch(loginWithPrivateKey(privateKey));
+
+  let {app} = getState();
+  await dispatch(setActiveAccount(app.account.address));
   await dispatch(loadBalance());
 }

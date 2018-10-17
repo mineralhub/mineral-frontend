@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { TransactionLink } from '../../common/Links';
+import { TransactionLink, AccountLink } from '../../common/Links';
 import { setTransactions } from '../../actions/blockchain';
-import { getTxTypeString } from '../../common/Blockchain';
+import { getTxTypeString, getAddressFromAddressHash } from '../../common/Blockchain';
 import moment from 'moment';
 
 class TransactionList extends Component {
@@ -19,7 +19,7 @@ class TransactionList extends Component {
                 <small>{moment.unix(tx.timestamp).fromNow()}</small>
               </div>
               <p>{getTxTypeString(tx.type)}</p>
-              <small>From : <a href="#">{tx.data.from.substr(0, 15) + '...'}</a></small>
+              <small>From : <AccountLink address={getAddressFromAddressHash(tx.data.from)}/></small>
             </li>
           );
         })

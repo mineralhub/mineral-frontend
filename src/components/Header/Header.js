@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { login, logout } from '../../actions/app';
 import {AccountLink, CreateAccountLink} from '../../common/Links';
+import {lognToSatosi} from '../../common/Blockchain';
 import {Link} from "react-router-dom";
 import { toast } from 'react-toastify';
 
@@ -44,6 +45,19 @@ class Header extends Component {
     return true;
   }
 
+  renderBalance = () => {
+    let {active} = this.props;
+    if (active.balance != undefined) {
+      return (
+        <label>balance : {lognToSatosi(active.balance)}</label>
+      )
+    } else {
+      return (
+        <label>balance : LOADING...</label>
+      )
+    }
+  }
+
   onClickLogout = () => {
     this.props.logout();
     this.setState({
@@ -54,7 +68,7 @@ class Header extends Component {
   }
 
   renderAccount = () => {
-    let { account } = this.props;
+    let { account, active } = this.props;
     if (account.isLoggedIn) {
       return (
         <div className="collapse navbar-collapse dual-collapse2">
@@ -65,6 +79,7 @@ class Header extends Component {
                 <li className="px-3 py-2 mb-2">
                   <small>
                   <AccountLink address={account.address} text={account.address} />
+                  {this.renderBalance()}
                   </small>
                   <button
                     type="button"
@@ -134,7 +149,8 @@ class Header extends Component {
 
 function mapStateToProps(state) {
   return {
-    account: state.app.account
+    account: state.app.account,
+    active: state.account.active
   };
 };
 

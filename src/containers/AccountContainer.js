@@ -16,6 +16,12 @@ export class AccountContainer extends Component {
     this.load(match.params.address);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location.key !== this.props.location.key) {
+      this.load(nextProps.match.params.address);
+    }
+  }
+
   load = async (address) => {
     const {dispatch} = this.props;
     dispatch(await loadAccount(address));
