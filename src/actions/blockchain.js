@@ -120,10 +120,10 @@ export const loadTransactionFromAddress = (address, page) => {
 	}
 }
 
-export const loadBlock = (hash) => {
+export const loadBlock = (height) => {
 	return (dispatch) => {
 		dispatch(setBlockPending());
-		axios.get(`http://127.0.0.1:80/block/${hash}`)
+		axios.get(`http://127.0.0.1:80/block/${height}`)
 			.then((response) => {
 				dispatch(setBlock(response.data));
 				dispatch(setBlockSuccess());

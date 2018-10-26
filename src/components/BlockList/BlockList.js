@@ -36,7 +36,7 @@ class BlockList extends Component {
           return (
             <li key={index} className="list-group-item list-group-item-action flex-column align-items-start">
               <div className="d-flex w-100 justify-content-between">
-                <BlockLink hash={block.hash} text={block.header.height} />
+                <BlockLink height={block.header.height} />
                 <small>{moment.unix(block.header.timestamp).fromNow()}</small>
               </div>
               <p>Transactions : {block.transactions.length}</p>

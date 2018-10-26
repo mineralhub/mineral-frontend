@@ -16,7 +16,7 @@ class App extends Component {
             <Switch>
               <Route exact path="/" component={HomeContainer}/>
               <Route path="/transaction/:hash" component={TransactionContainer}/>
-              <Route path="/block/:hash" component={BlockContainer}/>
+              <Route path="/block/:height" component={BlockContainer}/>
               <Route path="/account/create" component={CreateAccountContainer}/>
               <Route path="/account/:address" component={AccountContainer}/>
             </Switch>

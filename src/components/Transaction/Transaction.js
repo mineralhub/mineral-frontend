@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { getTxTypeString, longToSatosi } from '../../common/Blockchain';
 import { getAddressFromAddressHash } from '../../common/Blockchain';
-import { TransactionLink, AccountLink } from '../../common/Links';
+import { TransactionLink, AccountLink, BlockLink } from '../../common/Links';
 import moment from 'moment';
 
 class Transaction extends Component {
@@ -46,7 +46,7 @@ class Transaction extends Component {
           <dt className="col col-sm-3">Version:</dt>
           <dd className="col col-sm-9">{transaction.version}</dd>
           <dt className="col col-sm-3">Block Height:</dt>
-          <dd className="col col-sm-9">{transaction.block_height}</dd>
+          <dd className="col col-sm-9"><BlockLink height={transaction.block_height} /></dd>
           <dt className="col col-sm-3">Created Time:</dt>
           <dd className="col col-sm-9">
           {moment.unix(transaction.created_time).fromNow()}

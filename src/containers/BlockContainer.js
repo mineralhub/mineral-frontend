@@ -12,19 +12,19 @@ export class BlockContainer extends Component {
 
   componentDidMount() {
     let { match } = this.props;
-    this.load(match.params.hash);
+    this.load(match.params.height);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.location.key !== this.props.location.key &&
-      nextProps.match.params.hash !== this.props.match.params.hash) {
-      this.load(nextProps.match.params.hash);
+      nextProps.match.params.height !== this.props.match.params.height) {
+      this.load(nextProps.match.params.height);
     }
   }
 
-  load = async (hash) => {
+  load = async (height) => {
     const {dispatch} = this.props;
-    dispatch(await loadBlock(hash));
+    dispatch(await loadBlock(height));
   }
 
   render() {

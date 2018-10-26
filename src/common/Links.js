@@ -5,8 +5,8 @@ export const TransactionLink = ({hash, text=hash}) => (
   <Link to={`/transaction/${hash}`}>{text}</Link>
 );
 
-export const BlockLink = ({hash, text=hash}) => (
-  <Link to={`/block/${hash}`}>{text}</Link>
+export const BlockLink = ({height, text=height}) => (
+  <Link to={`/block/${height}`}>{text}</Link>
 );
 
 export const AccountLink = ({address, text=address}) => (

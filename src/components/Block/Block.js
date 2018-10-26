@@ -10,11 +10,9 @@ class Block extends Component {
       <div className="container">
         <dl className="row">
           <dt className="col col-sm-3">Height:</dt>
-          <dd className="col col-sm-9">{block.height}</dd>
+          <dd className="col col-sm-9"><BlockLink height={block.height} /></dd>
           <dt className="col col-sm-3">Hash:</dt>
-          <dd className="col col-sm-9"><BlockLink hash={block.hash} /></dd>
-          <dt className="col col-sm-3">Previous Hash:</dt>
-          <dd className="col col-sm-9"><BlockLink hash={block.prevhash} /></dd>
+          <dd className="col col-sm-9">{block.hash}</dd>
           <dt className="col col-sm-3">Version:</dt>
           <dd className="col col-sm-9">{block.version}</dd>
           <dt className="col col-sm-3">Created Time:</dt>
@@ -24,6 +22,8 @@ class Block extends Component {
           </dd>
           <dt className="col col-sm-3">Transactions:</dt>
           <dd className="col col-sm-9">{block.transactions}</dd>
+          <dt className="col col-sm-3">Previous Hash:</dt>
+          <dd className="col col-sm-9"><BlockLink height={block.height-1} text={block.prevhash} /></dd>
         </dl>
       </div>
     );
