@@ -32,7 +32,6 @@ class Transaction extends Component {
 
   render() {
     let { transaction } = this.props;
-    console.log(transaction);
     return (
       <div className="container">
         <dl className="row">

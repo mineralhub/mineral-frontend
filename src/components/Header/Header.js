@@ -2,16 +2,23 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { login, logout } from '../../actions/app';
 import { AccountLink, CreateAccountLink } from '../../common/Links';
-import { longToSatosi } from '../../common/Blockchain';
+import { longToSatosi, decryptString, encryptKey } from '../../common/Blockchain';
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
+import { readFileContentsFromEvent, KEYSTORE_EXTENSION } from '../../common/File';
+import InputPasswordModal from '../Account/InputPasswordModal';
 
 class Header extends Component {
   constructor(props) {
     super(props);
+
+    this.fileRef = React.createRef();
+
     this.state = {
       search: '',
       privateKey: '',
+      showInputPassword: false,
+      keystore: ''
     }
   }
 
@@ -37,12 +44,59 @@ class Header extends Component {
     });
   }
 
+  onClickOpenKeystore = () => {
+    this.setState({keystore: ''});
+    this.selectFile();
+  }
+
+  selectFile = () => {
+    this.fileRef.current.click();
+  }
+
+  onSelectedFile = async (e) => {
+    let content = await readFileContentsFromEvent(e);
+    this.fileRef.current.value = '';
+    this.setState({
+      showInputPassword: true,
+      keystore: JSON.parse(content)
+    })
+  }
+
   isLoginValid = () => {
     let { privateKey } = this.state;
     if (!privateKey || privateKey.length !== 64) {
       return false;
     }
     return true;
+  }
+
+  onClickLogout = () => {
+    this.props.logout();
+    this.setState({
+      privateKey: ''
+    });
+
+    toast.success("Success Logout", { position: toast.POSITION.BOTTOM_RIGHT });
+  }
+
+  onCloseInputPassword = () => {
+    this.setState({
+      showInputPassword: false
+    });
+  }
+
+  onConfirmInputPassword = (password) => {
+    let {keystore} = this.state;
+    let key = encryptKey(password, keystore.crypto.kdf.params, keystore.crypto.kdf.alg);
+    let privateKey = decryptString(keystore.crypto.cipher.text, key, keystore.crypto.cipher.params.iv, keystore.crypto.cipher.alg);
+    this.setState({
+      showInputPassword: false,
+      privateKey: privateKey,
+      keystore: ''
+    });
+    this.props.login(privateKey).then(() => {
+      toast.success("Success Login", { position: toast.POSITION.BOTTOM_RIGHT });
+    });
   }
 
   renderBalance = () => {
@@ -56,15 +110,6 @@ class Header extends Component {
         <label>balance : LOADING...</label>
       )
     }
-  }
-
-  onClickLogout = () => {
-    this.props.logout();
-    this.setState({
-      privateKey: ''
-    });
-
-    toast.success("Success Logout", { position: toast.POSITION.BOTTOM_RIGHT });
   }
 
   renderAccount = () => {
@@ -111,14 +156,28 @@ class Header extends Component {
                       placeholder="input private key"
                       onChange={this.onChangePrivateKey}>
                     </input>
-                  </div>
-                  <button
+                    <button
                     type="button"
                     className="btn btn-primary btn-block mt-3"
                     disabled={!this.isLoginValid()}
                     onClick={this.onClickLogin}>
                     Login
                     </button>
+                  </div>
+                  <hr />
+                  <div className="form-group">
+                    <div className="text-center"><p>Keystore File</p></div>
+                    <button
+                    type="button"
+                    className="btn btn-primary btn-block mt-3"
+                    onClick={this.onClickOpenKeystore}>
+                    Open Keystore
+                    </button>
+                    <input type="file" ref={this.fileRef} className="d-none"
+                      onChange={this.onSelectedFile}
+                      accept={KEYSTORE_EXTENSION} />
+                  </div>
+                  <hr />
                   <CreateAccountLink />
                 </li>
               </ul>
@@ -129,8 +188,20 @@ class Header extends Component {
     }
   }
 
+  renderModal = () => {
+    let { showInputPassword } = this.state;
+    return (
+      <InputPasswordModal 
+        isOpen={showInputPassword} 
+        onClose={this.onCloseInputPassword} 
+        onConfirm={this.onConfirmInputPassword}
+      />
+    )
+  }
+
   render() {
     return (
+      <div>
       <nav className="navbar navbar-expand-md navbar-dark bg-dark">
         <Link to='/' className="navbar-brand">Mineral Explorer</Link>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
@@ -143,8 +214,10 @@ class Header extends Component {
             </li>
           </ul>
         </div>
-        {this.renderAccount()};
+        {this.renderAccount()}
       </nav>
+      {this.renderModal()}
+      </div>
     )
   }
 }

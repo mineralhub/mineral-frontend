@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import ReactPasswordStrength from "react-password-strength";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { generateAccount } from '../../common/Blockchain';
+import { generateAccount, encryptKey, encryptString, generateMac } from '../../common/Blockchain';
 import { toast } from 'react-toastify';
+import crypto from 'crypto';
+import { downloadStringAsFile, KEYSTORE_EXTENSION } from '../../common/File';
 
 class CreateAccount extends Component {
   constructor(props) {
@@ -14,7 +16,8 @@ class CreateAccount extends Component {
       password: "",
       passwordValid: false,
       address: '',
-      privateKey: ''
+      privateKey: '',
+      salt: crypto.randomBytes(32).toString('hex')
     }
   }
 
@@ -44,8 +47,41 @@ class CreateAccount extends Component {
   }
 
   onClickDownloadKeystore = () => {
-    console.log(this.state.address);
-    console.log(this.state.privateKey);
+    let { address, privateKey, password, salt } = this.state;
+    const kdfparams = {
+      salt: salt,
+      dklen: 32,
+      n: 1 << 13,
+      p: 1,
+      r: 8
+    };
+
+    const kdfalg = "scrypt";
+    const cipheralg = "aes-128-ctr";
+    let iv = Buffer.concat([crypto.randomBytes(16)]);
+    let key = encryptKey(password, kdfparams, kdfalg);
+    let ciphertext = encryptString(privateKey, key, iv, cipheralg);
+    let mac = generateMac(ciphertext, key);
+    let json = {
+      address: address,
+      crypto: {
+        kdf: {
+          alg: kdfalg,
+          params: kdfparams,
+        },
+        cipher: {
+          alg: cipheralg,
+          text: ciphertext,
+          params: {
+            iv: iv.toString('hex')
+          }
+        },
+        mac: mac
+      },
+      version: 1
+    };
+
+    downloadStringAsFile(JSON.stringify(json), address + KEYSTORE_EXTENSION);
   }
 
   onClickCopyPrivateKey = () => {
