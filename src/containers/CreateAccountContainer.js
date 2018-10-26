@@ -4,10 +4,6 @@ import './CreateAccountContainer.css'
 import CreateAccount from '../components/Account/CreateAccount';
 
 class CreateAccountContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div className="container">

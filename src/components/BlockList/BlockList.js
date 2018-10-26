@@ -40,7 +40,7 @@ class BlockList extends Component {
                 <small>{moment.unix(block.header.timestamp).fromNow()}</small>
               </div>
               <p>Transactions : {block.transactions.length}</p>
-              <small>Produced by : <a href="#">Skypeople</a></small>
+              <small>Produced by : <a href="">Skypeople</a></small>
             </li>
           );
         })

@@ -25,9 +25,9 @@ class Transaction extends Component {
     switch (transaction.type) {
       case 1:
       return this.renderRewardTransaction(transaction);
-      case 2:
+      default:
+      return (<div></div>);
     }
-    return (<div></div>);
   }
 
   render() {

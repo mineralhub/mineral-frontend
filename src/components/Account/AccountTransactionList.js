@@ -26,9 +26,9 @@ class AccountTransactionList extends Component {
     switch (tx.type) {
       case 1:
         return this.renderRewardTransaction(tx, index);
-      case 2:
+      default:
+        return (<div></div>);
     }
-    return (<div></div>);
   }
 
   render() {

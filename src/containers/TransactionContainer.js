@@ -6,10 +6,6 @@ import { loadTransaction,
 import './TransactionContainer.css';
 
 export class TransactionContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     let { match } = this.props;
     this.load(match.params.hash);

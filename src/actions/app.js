@@ -2,6 +2,7 @@ import {setActiveAccount, loadBalance} from './account';
 
 export const LOGIN_WITH_PRIVATE_KEY = 'LOGIN_WITH_PRIVATE_KEY';
 export const LOGOUT = 'LOGOUT';
+export const SHOW_KEYSTORE_INPUT_MODAL = 'SHOW_KEYSTORE_INPUT_MODAL';
 
 export const loginWithPrivateKey = (privateKey) => ({
   type: LOGIN_WITH_PRIVATE_KEY,
@@ -19,3 +20,8 @@ export const login = (privateKey) => async (dispatch, getState) => {
   await dispatch(setActiveAccount(app.account.address));
   await dispatch(loadBalance());
 }
+
+export const showKeystoreInputModal = (keystore) => ({
+  type: SHOW_KEYSTORE_INPUT_MODAL,
+  keystore
+});

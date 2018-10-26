@@ -6,10 +6,6 @@ import { loadBlock,
 import './BlockContainer.css';
 
 export class BlockContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     let { match } = this.props;
     this.load(match.params.height);

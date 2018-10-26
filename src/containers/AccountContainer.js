@@ -5,12 +5,9 @@ import { SET_ACCOUNT_PENDING, SET_ACCOUNT_SUCCESS, SET_ACCOUNT_FAILURE, loadAcco
 import { SET_TRANSACTIONS_FROM_ADDRESS_PENDING, SET_TRANSACTIONS_FROM_ADDRESS_SUCCESS, SET_TRANSACTIONS_FROM_ADDRESS_FAILURE, loadTransactionFromAddress } from '../actions/blockchain';
 import Account from '../components/Account/Account';
 import AccountTransactionList from '../components/Account/AccountTransactionList';
+import { toast } from 'react-toastify';
 
 export class AccountContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     let { match } = this.props;
     this.load(match.params.address);
@@ -39,8 +36,9 @@ export class AccountContainer extends Component {
       return (
         <AccountTransactionList />
       );
-    } else {
-      return <div></div>
+    } else if (setTransactionsFromAddress === SET_TRANSACTIONS_FROM_ADDRESS_FAILURE){
+      toast.error("load account transaction error.", {position: toast.POSITION.BOTTOM_RIGHT})
+      return <div />
     }
   }
 
@@ -58,7 +56,8 @@ export class AccountContainer extends Component {
         </div>
       );
     } else if (setAccount === SET_ACCOUNT_FAILURE) {
-
+      toast.error("load account error.", {position: toast.POSITION.BOTTOM_RIGHT})
+      return <div />
     }
     return <div></div>
   }

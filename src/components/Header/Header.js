@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { login, logout } from '../../actions/app';
+import { login, logout, showKeystoreInputModal } from '../../actions/app';
 import { AccountLink, CreateAccountLink } from '../../common/Links';
-import { longToSatosi, decryptString, encryptKey } from '../../common/Blockchain';
+import { longToSatosi } from '../../common/Blockchain';
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { readFileContentsFromEvent, KEYSTORE_EXTENSION } from '../../common/File';
-import InputPasswordModal from '../Account/InputPasswordModal';
 
 class Header extends Component {
   constructor(props) {
@@ -15,20 +14,8 @@ class Header extends Component {
     this.fileRef = React.createRef();
 
     this.state = {
-      search: '',
-      privateKey: '',
-      showInputPassword: false,
-      keystore: ''
+      privateKey: ''
     }
-  }
-
-  onChangeSearch = (e) => {
-    this.setState({
-      search: e.target.value
-    })
-  }
-
-  onClickSearch = () => {
   }
 
   onChangePrivateKey = (e) => {
@@ -45,7 +32,6 @@ class Header extends Component {
   }
 
   onClickOpenKeystore = () => {
-    this.setState({keystore: ''});
     this.selectFile();
   }
 
@@ -56,10 +42,7 @@ class Header extends Component {
   onSelectedFile = async (e) => {
     let content = await readFileContentsFromEvent(e);
     this.fileRef.current.value = '';
-    this.setState({
-      showInputPassword: true,
-      keystore: JSON.parse(content)
-    })
+    this.props.showKeystoreInputModal(content);
   }
 
   isLoginValid = () => {
@@ -68,6 +51,9 @@ class Header extends Component {
       return false;
     }
     return true;
+  }
+
+  onSendTransaction = () => {
   }
 
   onClickLogout = () => {
@@ -79,29 +65,9 @@ class Header extends Component {
     toast.success("Success Logout", { position: toast.POSITION.BOTTOM_RIGHT });
   }
 
-  onCloseInputPassword = () => {
-    this.setState({
-      showInputPassword: false
-    });
-  }
-
-  onConfirmInputPassword = (password) => {
-    let {keystore} = this.state;
-    let key = encryptKey(password, keystore.crypto.kdf.params, keystore.crypto.kdf.alg);
-    let privateKey = decryptString(keystore.crypto.cipher.text, key, keystore.crypto.cipher.params.iv, keystore.crypto.cipher.alg);
-    this.setState({
-      showInputPassword: false,
-      privateKey: privateKey,
-      keystore: ''
-    });
-    this.props.login(privateKey).then(() => {
-      toast.success("Success Login", { position: toast.POSITION.BOTTOM_RIGHT });
-    });
-  }
-
   renderBalance = () => {
     let { active } = this.props;
-    if (active.balance != undefined) {
+    if (active.balance !== undefined) {
       return (
         <label>balance : {longToSatosi(active.balance)}</label>
       )
@@ -113,7 +79,7 @@ class Header extends Component {
   }
 
   renderAccount = () => {
-    let { account, active } = this.props;
+    let { account } = this.props;
     if (account.isLoggedIn) {
       return (
         <div className="collapse navbar-collapse dual-collapse2">
@@ -127,13 +93,19 @@ class Header extends Component {
                       <AccountLink address={account.address} text={account.address} />
                       {this.renderBalance()}
                     </small>
-                    <button
-                      type="button"
-                      className="btn btn-primary btn-block mt-3"
-                      onClick={this.onClickLogout}>
-                      Logout
-                </button>
                   </div>
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-block mt-3"
+                    onClick={this.onSendTransaction}>
+                    Send
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-block mt-3"
+                    onClick={this.onClickLogout}>
+                    Logout
+                  </button>
                 </li>
               </ul>
             </li>
@@ -188,17 +160,6 @@ class Header extends Component {
     }
   }
 
-  renderModal = () => {
-    let { showInputPassword } = this.state;
-    return (
-      <InputPasswordModal 
-        isOpen={showInputPassword} 
-        onClose={this.onCloseInputPassword} 
-        onConfirm={this.onConfirmInputPassword}
-      />
-    )
-  }
-
   render() {
     return (
       <div>
@@ -216,7 +177,6 @@ class Header extends Component {
         </div>
         {this.renderAccount()}
       </nav>
-      {this.renderModal()}
       </div>
     )
   }
@@ -231,6 +191,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   login,
-  logout
+  logout,
+  showKeystoreInputModal
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

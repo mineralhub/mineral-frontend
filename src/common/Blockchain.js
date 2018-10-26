@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import RIPEMD160 from 'ripemd160';
-import {encode as bs58Encode, decode as bs58Decode} from 'bs58check';
+import {encode as bs58Encode} from 'bs58check';
 import {ec as EC} from 'elliptic';
 import scrypt from 'scryptsy';
 import keccak from 'keccak';
@@ -13,8 +13,8 @@ export const getTxTypeString = (tx) => {
     case 4: return "RegisterDelegateTransaction";
     case 5: return "OtherSignTransaction";
     case 6: return "SignTransaction";
+    default: return "Uknown Transaction";
   }
-  return "Uknown Transaction";
 }
 
 export const longToSatosi = (v) => {

@@ -168,6 +168,8 @@ class CreateAccount extends Component {
             </div>
           </div>
         )
+      default:
+        return <div />
     }
   }
 }
