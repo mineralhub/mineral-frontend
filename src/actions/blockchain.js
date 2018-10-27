@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 export const SET_BLOCKS = 'SET_BLOCKS';
 export const SET_TRANSACTIONS = 'SET_TRANSACTIONS';
 export const SET_TRANSACTION_PENDING = 'SET_TRANSACTION_PENDING';
@@ -16,6 +14,8 @@ export const SET_BLOCK_PENDING = 'SET_BLOCK_PENDING';
 export const SET_BLOCK_SUCCESS = 'SET_BLOCK_SUCCESS';
 export const SET_BLOCK_FAILURE = 'SET_BLOCK_FAILURE';
 export const SET_BLOCK = 'SET_BLOCK';
+
+const cli = require('./../client/nodeClient');
 
 export const setBlocks = (blocks = []) => ({
   type: SET_BLOCKS,
@@ -95,40 +95,43 @@ export const loadTransactions = (socket) => {
 }
 
 export const loadTransaction = (hash) => {
-	return (dispatch) => {
-		dispatch(setTransactionPending());
-		axios.get(`http://127.0.0.1:80/transaction/${hash}`)
-			.then((response) => {
-				dispatch(setTransaction(response.data));
-				dispatch(setTransactionSuccess());
-			}).catch((error) => {
-				dispatch(setTransactionFailure());
-			});
+	return async (dispatch) => {
+		try {
+			dispatch(setTransactionPending());
+			let res = await cli.loadTransaction(hash);
+			dispatch(setTransaction(res.data));
+			dispatch(setTransactionSuccess());
+		} catch (e) {
+			dispatch(setTransactionFailure());
+			throw e;
+		}
 	}
 }
 
 export const loadTransactionFromAddress = (address, page) => {
-	return (dispatch) => {
-		dispatch(setTransactionsFromAddressPending());
-		axios.get(`http://127.0.0.1:80/transaction/${address}/${page}`)
-			.then((response) => {
-				dispatch(setTransactionsFromAddress(response.data));
-				dispatch(setTransactionsFromAddressSuccess());
-			}).catch((error) => {
-				dispatch(setTransactionsFromAddressFailure());
-			});
+	return async (dispatch) => {
+		try {
+			dispatch(setTransactionsFromAddressPending());
+			let res = await cli.loadTransactionFromAddress(address, page);
+			dispatch(setTransactionsFromAddress(res.data));
+			dispatch(setTransactionsFromAddressSuccess());
+		} catch (e) {
+			dispatch(setTransactionsFromAddressFailure());
+			throw e;
+		}
 	}
 }
 
 export const loadBlock = (height) => {
-	return (dispatch) => {
-		dispatch(setBlockPending());
-		axios.get(`http://127.0.0.1:80/block/${height}`)
-			.then((response) => {
-				dispatch(setBlock(response.data));
-				dispatch(setBlockSuccess());
-			}).catch((error) => {
-				dispatch(setBlockFailure());
-			});
+	return async (dispatch) => {
+		try {
+			dispatch(setBlockPending());
+			let res = await cli.loadBlock(height);
+			dispatch(setBlock(res.data));
+			dispatch(setBlockSuccess());
+		} catch (e) {
+			dispatch(setBlockFailure());
+			throw e;
+		}
 	}
 }
