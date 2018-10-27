@@ -39,7 +39,6 @@ class InputPasswordModal extends Component {
 
   render() {
     let { isOpen } = this.props;
-    console.log(isOpen);
     return (
       <div>
         <Modal isOpen={isOpen} className={this.props.className}>
@@ -70,7 +69,6 @@ class InputPasswordModal extends Component {
 
 function mapStateToProps(state) {
   return {
-    
   };
 };
 

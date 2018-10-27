@@ -5,8 +5,6 @@ const initialState = {
 };
 
 export function blockchain(state = initialState, action) {
-	console.log(action);
-
   switch (action.type) {
     case SET_BLOCKS: {
 			return {

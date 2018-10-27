@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { login, logout, showKeystoreInputModal } from '../../actions/app';
+import { login, logout, showKeystoreInputModal, showSendTransactionModal } from '../../actions/app';
 import { AccountLink, CreateAccountLink } from '../../common/Links';
 import { longToSatosi } from '../../common/Blockchain';
 import { Link } from "react-router-dom";
@@ -54,6 +54,7 @@ class Header extends Component {
   }
 
   onSendTransaction = () => {
+    this.props.showSendTransactionModal(true);
   }
 
   onClickLogout = () => {
@@ -192,6 +193,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   login,
   logout,
-  showKeystoreInputModal
+  showKeystoreInputModal,
+  showSendTransactionModal
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
