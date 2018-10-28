@@ -35,8 +35,7 @@ class TransactionBase {
   toBuffer() {
     let buf = Buffer.alloc(28);
     this.fee.toBuffer().copy(buf, 0);
-    let frombuf = addrToHash(this.from);
-    frombuf.copy(buf, 8);
+    addrToHash(this.from).copy(buf, 8);
     return buf;
   }
 }
@@ -54,6 +53,29 @@ class RewardTransaction extends TransactionBase {
   toBuffer() {
     let buf = Buffer.alloc(this.size(), super.toBuffer());
     this.reward.toBuffer().copy(buf, super.size());
+    return buf;
+  }
+}
+
+class TransferTransaction extends TransactionBase {
+  constructor() {
+    super();
+    this.to = {}; // key: 20 byte (UInt160 address hash), value : 8 byte (Fixed8) = 28 * n
+  }
+
+  size() {
+    return super.size() + Object.keys(this.to).length * 28;
+  }
+
+  toBuffer() {
+    let buf = Buffer.alloc(this.size(), super.toBuffer());
+    let cursor = super.size();
+    for (let addr in this.to) {
+      addrToHash(addr).copy(buf, cursor);
+      cursor += 20;
+      this.to[addr].toBuffer().copy(buf, cursor);
+      cursor += 8;      
+    }
     return buf;
   }
 }
@@ -76,5 +98,6 @@ class Transaction {
 module.exports = {
   TransactionBase,
   RewardTransaction,
+  TransferTransaction,
   Transaction
 }
