@@ -8,12 +8,19 @@ import { ToastContainer } from "react-toastify";
 import InputPasswordModal from './components/Account/InputPasswordModal';
 import { login, showKeystoreInputModal, showSendTransactionModal } from './actions/app';
 import { toast } from 'react-toastify';
-import { encryptKey, decryptString, generateMac } from './common/Blockchain';
+import { toFixed8Long, encryptKey, decryptString, generateMac } from './common/Blockchain';
 import SendTransactionModal from './components/Transaction/SendTransactionModal';
+
+import {
+  TransferTransaction,
+  Transaction,
+  TransactionType
+} from './common/Transaction';
+import { sendTo } from './actions/blockchain';
 
 export class AppCmp extends Component {
   renderModal = () => {
-    let { keystore, showModal } = this.props;
+    let { account, keystore, showModal } = this.props;
     return (
       <div>
       <InputPasswordModal
@@ -49,7 +56,19 @@ export class AppCmp extends Component {
         }
         onConfirm={
           (state) => {
-
+            let transfer = new TransferTransaction(account.address);
+            transfer.to[state.to] = toFixed8Long(state.amount);
+            if (transfer.to[state.to] === undefined) {
+              toast.error('invalid amount.', { position: toast.POSITION.BOTTOM_RIGHT });
+              return;
+            }
+            let tx = new Transaction(TransactionType.Transfer, transfer);
+            tx.setTimestamp();
+            tx.sign(account.key);
+            console.log(tx);
+            this.props.sendTo([...tx.toBuffer()]).then((result) => {
+              console.log(result);
+            });
           }
         }
       />
@@ -79,6 +98,7 @@ export class AppCmp extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    account: state.app.account,
     keystore: state.app.keystore,
     showModal: {
       sendTransaction: state.app.showModal.sendTransaction
@@ -89,7 +109,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   login,
   showKeystoreInputModal,
-  showSendTransactionModal
+  showSendTransactionModal,
+  sendTo
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppCmp);

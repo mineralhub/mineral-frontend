@@ -5,6 +5,8 @@ import {ec as EC} from 'elliptic';
 import scrypt from 'scryptsy';
 import keccak from 'keccak';
 
+const Int64 = require('int64-buffer').Int64LE;
+
 export const getTxTypeString = (tx) => {
   switch (tx) {
     case 1: return "RewardTransaction";
@@ -17,10 +19,29 @@ export const getTxTypeString = (tx) => {
   }
 }
 
-export const longToSatosi = (v) => {
-  if (0 < v)
-    return Number(v / 100000000).toFixed(8);
-  return Number(0).toFixed(8);
+export const toFixed8 = (v) => {
+  if (isNaN(v)) {
+    return false;
+  }
+  let str = String(v);
+  return str.slice(0, str.length - 8) + '.' + str.slice(str.length - 8);
+}
+
+export const toFixed8Long = (str) => {
+  if (isNaN(str)) {
+    return undefined;
+  }
+  let idx = str.indexOf('.');
+  let fixedLength = idx === -1 ? 0 : str.length - idx - 1;
+  if (8 < fixedLength) {
+    return undefined;
+  }
+  str = str.replace('.', '');
+  while (fixedLength < 8) {
+    str += '0';
+    ++fixedLength;
+  }
+  return new Int64(str);
 }
 
 export const getPubKeyFromPriKey = (prikey) => {

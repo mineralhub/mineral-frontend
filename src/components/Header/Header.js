@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { login, logout, showKeystoreInputModal, showSendTransactionModal } from '../../actions/app';
 import { AccountLink, CreateAccountLink } from '../../common/Links';
-import { longToSatosi } from '../../common/Blockchain';
+import { toFixed8 } from '../../common/Blockchain';
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { readFileContentsFromEvent, KEYSTORE_EXTENSION } from '../../common/File';
@@ -70,7 +70,7 @@ class Header extends Component {
     let { active } = this.props;
     if (active.balance !== undefined) {
       return (
-        <label>balance : {longToSatosi(active.balance)}</label>
+        <label>balance : {toFixed8(active.balance)}</label>
       )
     } else {
       return (

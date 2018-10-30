@@ -24,9 +24,9 @@ var addrToHash = (addr) => {
 }
 
 class TransactionBase {
-  constructor() {
-    this.fee = undefined; // 8 byte (Fixed8)
-    this.from = undefined; // 20 byte (UInt160 address hash)
+  constructor(from) {
+    this.fee = new Int64(0); // 8 byte (Fixed8)
+    this.from = from; // 20 byte (UInt160 address hash)
   }
 
   size() {
@@ -42,8 +42,8 @@ class TransactionBase {
 }
 
 class RewardTransaction extends TransactionBase {
-  constructor() {
-    super();
+  constructor(from) {
+    super(from);
     this.reward = undefined; // 8 byte (Fixed8)
   }
 
@@ -59,41 +59,49 @@ class RewardTransaction extends TransactionBase {
 }
 
 class TransferTransaction extends TransactionBase {
-  constructor() {
-    super();
+  constructor(from) {
+    super(from);
     this.to = {}; // key: 20 byte (UInt160 address hash), value : 8 byte (Fixed8) = 28 * n
   }
 
   size() {
-    return super.size() + Object.keys(this.to).length * 28;
+    return super.size() 
+      + 4 // to. length
+      + Object.keys(this.to).length * 28; // to. key & value
   }
 
   toBuffer() {
     let buf = Buffer.alloc(this.size(), super.toBuffer());
     let cursor = super.size();
+    buf.writeInt32LE(Object.keys(this.to).length, cursor);
+    cursor += 4;
     for (let addr in this.to) {
       addrToHash(addr).copy(buf, cursor);
       cursor += 20;
       this.to[addr].toBuffer().copy(buf, cursor);
-      cursor += 8;      
+      cursor += 8;
     }
     return buf;
   }
 }
 
 class VoteTransaction extends TransactionBase {
-  constructor() {
-    super();
+  constructor(from) {
+    super(from);
     this.votes = {}; // key: 20 byte (UInt160 address hash), value : 8 byte (Fixed8) = 28 * n
   }
 
   size() {
-    return super.size() + Object.keys(this.votes).length * 28;
+    return super.size() 
+      + 4 // votes. length
+      + Object.keys(this.votes).length * 28; // votes. key & value
   }
 
   toBuffer() {
     let buf = Buffer.alloc(this.size(), super.toBuffer());
     let cursor = super.size();
+    buf.writeInt32LE(Object.keys(this.votes).length, cursor);
+    cursor += 4;
     for (let addr in this.votes) {
       addrToHash(addr).copy(buf, cursor);
       cursor += 20;
@@ -105,25 +113,30 @@ class VoteTransaction extends TransactionBase {
 }
 
 class RegisterDelegateTransaction extends TransactionBase {
-  constructor() {
-    super();
+  constructor(from) {
+    super(from);
     this.name = undefined; // dynamic size (byte array)
   }
   
   size() {
-    return super.size() + this.name.length;
+    return super.size() 
+      + 4 // name. byte length
+      + this.name.length; // name.
   }
 
   toBuffer() {
     let buf = Buffer.alloc(this.size(), super.toBuffer());
-    this.name.copy(buf, super.size());
+    let cursor = super.size();
+    buf.writeInt32LE(this.name.length, cursor);
+    cursor += 4;
+    this.name.copy(buf, cursor);
     return buf;
   }
 }
 
 class OtherSignTransaction extends TransactionBase {
-  constructor() {
-    super();
+  constructor(from) {
+    super(from);
     this.to = {}; // key: 20 byte (UInt160 address hash), value : 8 byte (Fixed8) = 28 * n
     this.others = []; // dynamic size (string array)
     this.expirationBlockHeight = 0; // 4 byte (integer)
@@ -138,18 +151,27 @@ class OtherSignTransaction extends TransactionBase {
   }
 
   size() {
-    return super.size() + Object.keys(this.to).length * 28 + this.othersSize() + 4;
+    return super.size() 
+      + 4 // to. length
+      + Object.keys(this.to).length * 28 // to. key & value
+      + 4 // others. length
+      + this.othersSize() // others.
+      + 4;
   }
 
   toBuffer() {
     let buf = Buffer.alloc(this.size(), super.toBuffer());
     let cursor = super.size();
+    buf.writeInt32LE(this.to.length, cursor);
+    cursor += 4;
     for (let addr in this.to) {
       addrToHash(addr).copy(buf, cursor);
       cursor += 20;
       this.to[addr].toBuffer().copy(buf, cursor);
       cursor += 8;      
     }
+    buf.writeInt32LE(this.others.length, cursor);
+    cursor += 4;
     for (let i = 0; i < this.others.length; ++i) {
       buf.write(this.others[i], cursor);
       cursor += this.others[i].length;
@@ -160,8 +182,8 @@ class OtherSignTransaction extends TransactionBase {
 }
 
 class SignTransaction extends TransactionBase {
-  constructor() {
-    super();
+  constructor(from) {
+    super(from);
     this.signTxHash = undefined; // 32 byte (UInt256)
   }
 
@@ -177,8 +199,8 @@ class SignTransaction extends TransactionBase {
 }
 
 class LockTransaction extends TransactionBase {
-  constructor() {
-    super();
+  constructor(from) {
+    super(from);
     this.lockValue = undefined; // 8 byte (Fixed8)
   }
 
@@ -194,8 +216,8 @@ class LockTransaction extends TransactionBase {
 }
 
 class UnlockTransaction extends TransactionBase {
-  constructor() {
-    super();
+  constructor(from) {
+    super(from);
   }
 
   size() {
@@ -208,17 +230,24 @@ class UnlockTransaction extends TransactionBase {
 }
 
 class Transaction {
-  constructor(type = TransactionType.None) {
+  constructor(type = TransactionType.None, data = undefined) {
     this.version = 0; // 2 byte (short)
     this.type = type; // 2 byte (short)
     this.timestamp = 0; // 4 byte (integer)
-    this.data = undefined; // dynamic size
+    this.data = data; // dynamic size
     this.signature = undefined;
     this.pubkey = undefined;
   }
 
   size() {
-    return 2 + 2 + 4 + this.data.size() + this.signature.length + this.pubkey.length;
+    return 2 // version
+      + 2 // type
+      + 4 // timestamp
+      + this.data.size() // data
+      + 4 // signature. length
+      + this.signature.length  // signature
+      + 4 // pubkey. length
+      + this.pubkey.length; // pubkey
   }
 
   sizeUnsigned() {
@@ -227,8 +256,14 @@ class Transaction {
 
   toBuffer() {
     let buf = Buffer.alloc(this.size(), this.toBufferUnsigned());
-    this.signature.copy(buf, this.sizeUnsigned());
-    this.pubkey.copy(buf, this.sizeUnsigned() + this.signature.length);
+    let cursor = this.sizeUnsigned();
+    buf.writeInt32LE(this.signature.length, cursor);
+    cursor += 4;
+    this.signature.copy(buf, cursor);
+    cursor += this.signature.length;
+    buf.writeInt32LE(this.pubkey.length, cursor);
+    cursor += 4;
+    this.pubkey.copy(buf, cursor);
     return buf;
   }
 
@@ -241,12 +276,16 @@ class Transaction {
     return buf;
   }
 
+  setTimestamp() {
+    this.timestamp = Date.now() / 1000;
+  }
+
   sign(prikey) {
     let bufUnsigned = this.toBufferUnsigned();
     let ec = new EC('secp256k1');
     let key = ec.keyFromPrivate(prikey, 'hex');
-    this.signature = Buffer.from(ec.sign(bufUnsigned, key).toDER(), 'hex');
-    this.pubkey = Buffer.from(key.getPublic().encode('hex'), 'hex');
+    this.signature = Buffer.from(ec.sign(bufUnsigned, key).toDER());
+    this.pubkey = Buffer.from(key.getPublic().encode());
   }
 }
 

@@ -32,6 +32,7 @@ export function account(state = initialState, action) {
       return {
         ...state, 
         active: {
+          ...state.active,
           balance: action.balance
         }
       }

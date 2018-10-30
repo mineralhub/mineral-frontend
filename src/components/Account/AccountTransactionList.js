@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { longToSatosi, getAddressFromAddressHash } from '../../common/Blockchain';
+import { toFixed8, getAddressFromAddressHash } from '../../common/Blockchain';
 import moment from 'moment';
 import { TransactionLink, AccountLink } from '../../common/Links';
 
@@ -17,7 +17,7 @@ class AccountTransactionList extends Component {
             address={getAddressFromAddressHash(tx.data.from)} 
           />
         </td>
-        <td>{longToSatosi(tx.data.reward)}</td>
+        <td>{toFixed8(tx.data.reward)}</td>
       </tr>
     )
   }
