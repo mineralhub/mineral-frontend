@@ -29,7 +29,8 @@ export function app(state = initialState, action) {
     case LOGOUT: {
       return {
         ...state,
-        account: initialState.account
+        account: initialState.account,
+        keystore: undefined
       }
     }
     case SHOW_KEYSTORE_INPUT_MODAL: {

@@ -60,11 +60,15 @@ console.log('----- transaction unit test');
 let transaction = new Transaction(TransactionType.Transfer);
 transaction.data = transfer;
 transaction.sign('6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b');
+transaction.verify();
 
 const fs = require('fs');
-var stream = fs.createWriteStream('./tx');
+var stream = fs.createWriteStream('./sha-tx.txt');
 stream.write(transaction.toBuffer());
 stream.end();
+
+console.log('tx unsigned length : ' + transaction.sizeUnsigned());
 console.log('tx signature length : ' + transaction.signature.length);
 console.log('tx pubkey length : ' + transaction.pubkey.length);
 console.log(transaction.toBuffer().length === transaction.size());
+transfer.toBuffer();

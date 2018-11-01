@@ -36,8 +36,7 @@ export function blockchain(state = initialState, action) {
 				...state,
 				addressTransactions: action.transactions
 			}
-		}
-		
+		}		
 		default:
 			return state;
   }

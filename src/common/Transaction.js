@@ -1,6 +1,7 @@
 const Int64 = require('int64-buffer').Int64LE;
 const base58Check = require('bs58check');
 const EC = require('elliptic').ec;
+const crypto = require('crypto');
 
 var TransactionType = {
   None: 0,
@@ -16,7 +17,7 @@ var TransactionType = {
 
 var addrToHash = (addr) => {
   let buf = base58Check.decode(addr);
-  if (buf.length != 21)
+  if (buf.length !== 21)
     return null;
   let result = Buffer.alloc(20);
   buf.copy(result, 0, 1, 21);
@@ -216,10 +217,6 @@ class LockTransaction extends TransactionBase {
 }
 
 class UnlockTransaction extends TransactionBase {
-  constructor(from) {
-    super(from);
-  }
-
   size() {
     return super.size();
   }
@@ -281,11 +278,20 @@ class Transaction {
   }
 
   sign(prikey) {
-    let bufUnsigned = this.toBufferUnsigned();
     let ec = new EC('secp256k1');
+    let bufUnsigned = this.toBufferUnsigned();
+    let hash = crypto.createHash('sha256').update(bufUnsigned).digest();
     let key = ec.keyFromPrivate(prikey, 'hex');
-    this.signature = Buffer.from(ec.sign(bufUnsigned, key).toDER());
+    this.signature = Buffer.from(ec.sign(hash, key).toDER());
     this.pubkey = Buffer.from(key.getPublic().encode());
+  }
+
+  verify() {
+    let ec = new EC('secp256k1');
+    let bufUnsigned = this.toBufferUnsigned();
+    let hash = crypto.createHash('sha256').update(bufUnsigned).digest();
+    let key = ec.keyFromPublic(this.pubkey);
+    return ec.verify(hash, this.signature, key);
   }
 }
 

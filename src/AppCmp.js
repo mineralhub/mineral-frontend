@@ -65,9 +65,16 @@ export class AppCmp extends Component {
             let tx = new Transaction(TransactionType.Transfer, transfer);
             tx.setTimestamp();
             tx.sign(account.key);
-            console.log(tx);
-            this.props.sendTo([...tx.toBuffer()]).then((result) => {
+
+            this.props.sendTo([...tx.toBuffer()])
+            .then((result) => {
               console.log(result);
+              toast.success("successed. transfer transaction.", { position: toast.POSITION.BOTTOM_RIGHT });
+              this.props.showSendTransactionModal(false);
+            })
+            .catch((e) => {
+              console.log(e);
+              toast.error('failed. transfer transaction.', { position: toast.POSITION.BOTTOM_RIGHT });
             });
           }
         }

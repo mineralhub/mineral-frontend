@@ -15,11 +15,6 @@ export const SET_BLOCK_SUCCESS = 'SET_BLOCK_SUCCESS';
 export const SET_BLOCK_FAILURE = 'SET_BLOCK_FAILURE';
 export const SET_BLOCK = 'SET_BLOCK';
 
-export const SEND_TO_PENDING = 'SEND_TO_PENDING';
-export const SEND_TO_SUCCESS = 'SEND_TO_SUCCESS';
-export const SEND_TO_FAILURE = 'SEND_TO_FAILURE';
-export const SEND_TO = 'SEND_TO';
-
 const cli = require('./../client/nodeClient');
 
 export const setBlocks = (blocks = []) => ({
@@ -91,23 +86,6 @@ export const loadBlocks = (socket) => {
 	}
 }
 
-const sendToResult = (result) => ({
-	type: SEND_TO,
-	result
-});
-
-const sendToPending = () => ({
-	type: SEND_TO_PENDING
-});
-
-const sendToSuccess = () => ({
-	type: SEND_TO_SUCCESS
-});
-
-const sendToFailure = () => ({
-	type: SEND_TO_FAILURE
-});
-
 export const loadTransactions = (socket) => {
 	return (dispatch) => {
 		socket.on('lasttransactions', (recv) => {
@@ -160,12 +138,9 @@ export const loadBlock = (height) => {
 
 export const sendTo = (bytes) => async (dispatch, getState) => {
 	try {
-		dispatch(sendToPending());
 		let res = await cli.sendTo(bytes);
-		dispatch(sendToResult(res.data));
-		dispatch(sendToSuccess());
+		return res.data;
 	} catch (e) {
-		dispatch(sendToFailure());
 		throw e;
 	}
 }

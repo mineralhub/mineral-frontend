@@ -11,22 +11,63 @@ class Transaction extends Component {
       <dl className="row">
         <dt className="col col-sm-3">From:</dt>
         <dd className="col col-sm-9">
-          <AccountLink 
-            address={getAddressFromAddressHash(transaction.data.from)} 
+          <AccountLink
+            address={getAddressFromAddressHash(transaction.data.from)}
           />
         </dd>
-        <dt className="col col-sm-3">Reward:</dt>
+        <dt className="col col-sm-3">To:</dt>
         <dd className="col col-sm-9">{toFixed8(transaction.data.reward)}</dd>
       </dl>
     );
   }
 
+  renderTransferTransaction = (transaction) => {
+    return (
+      <dl className="row">
+        <dt className="col col-sm-3">From:</dt>
+        <dd className="col col-sm-9">
+          <AccountLink
+            address={getAddressFromAddressHash(transaction.data.from)}
+          />
+        </dd>
+        <dt className="col col-sm-3">To:</dt>
+        <table className="table">
+          <thead className="thead-dark">
+            <tr>
+              <th scope="col">Address</th>
+              <th scope="col">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              transaction.data.to.map((v, idx) => {
+                console.log(v);
+                return (
+                  <tr key={idx}>
+                    <td scope="row">
+                      <AccountLink
+                        address={getAddressFromAddressHash(v.addr)}
+                      />
+                    </td>
+                    <td>{toFixed8(v.amount)}</td>
+                  </tr>
+                )
+              })
+            }
+          </tbody>
+        </table>
+      </dl>
+    )
+  }
+
   renderTransactionData = (transaction) => {
     switch (transaction.type) {
       case 1:
-      return this.renderRewardTransaction(transaction);
+        return this.renderRewardTransaction(transaction);
+      case 2:
+        return this.renderTransferTransaction(transaction);
       default:
-      return (<div></div>);
+        return (<div></div>);
     }
   }
 
@@ -49,8 +90,8 @@ class Transaction extends Component {
           <dd className="col col-sm-9"><BlockLink height={transaction.block_height} /></dd>
           <dt className="col col-sm-3">Created Time:</dt>
           <dd className="col col-sm-9">
-          {moment.unix(transaction.created_time).fromNow()}
-          ({moment.unix(transaction.created_time).format("YYYY-MM-DD HH:mm Z")})
+            {moment.unix(transaction.created_time).fromNow()}
+            ({moment.unix(transaction.created_time).format("YYYY-MM-DD HH:mm Z")})
           </dd>
         </dl>
         {this.renderTransactionData(transaction)}
