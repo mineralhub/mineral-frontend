@@ -1,5 +1,5 @@
 import { publicKeyCreate } from 'secp256k1';
-import { LOGIN_WITH_PRIVATE_KEY, LOGOUT, SHOW_KEYSTORE_INPUT_MODAL, SHOW_SEND_TRANSACTION_MODAL } from '../actions/app';
+import { LOGIN_WITH_PRIVATE_KEY, LOGOUT, SHOW_KEYSTORE_INPUT_MODAL, SHOW_SEND_TRANSACTION_MODAL, SHOW_LOCK_TRANSACTION_MODAL } from '../actions/app';
 import { getAddressFromPubKey } from '../common/Blockchain';
 
 const initialState = {
@@ -43,7 +43,17 @@ export function app(state = initialState, action) {
       return {
         ...state,
         showModal: {
+          ...state.showModal,
           sendTransaction: action.show
+        }
+      }
+    }
+    case SHOW_LOCK_TRANSACTION_MODAL: {
+      return {
+        ...state,
+        showModal: {
+          ...state.showModal,
+          lockTransaction: action.show
         }
       }
     }

@@ -136,9 +136,9 @@ export const loadBlock = (height) => {
 	}
 }
 
-export const sendTo = (bytes) => async (dispatch, getState) => {
+export const addTransaction = (bytes) => async (dispatch, getState) => {
 	try {
-		let res = await cli.sendTo(bytes);
+		let res = await cli.addTransaction(bytes);
 		return res.data;
 	} catch (e) {
 		throw e;

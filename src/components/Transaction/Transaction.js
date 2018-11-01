@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { getTxTypeString, toFixed8 } from '../../common/Blockchain';
-import { getAddressFromAddressHash } from '../../common/Blockchain';
+import { getTxTypeString, toFixed8, getAddressFromAddressHash } from '../../common/Blockchain';
+import { TransactionType } from '../../common/Transaction';
 import { TransactionLink, AccountLink, BlockLink } from '../../common/Links';
 import moment from 'moment';
 
@@ -9,12 +9,6 @@ class Transaction extends Component {
   renderRewardTransaction = (transaction) => {
     return (
       <dl className="row">
-        <dt className="col col-sm-3">From:</dt>
-        <dd className="col col-sm-9">
-          <AccountLink
-            address={getAddressFromAddressHash(transaction.data.from)}
-          />
-        </dd>
         <dt className="col col-sm-3">To:</dt>
         <dd className="col col-sm-9">{toFixed8(transaction.data.reward)}</dd>
       </dl>
@@ -24,12 +18,6 @@ class Transaction extends Component {
   renderTransferTransaction = (transaction) => {
     return (
       <dl className="row">
-        <dt className="col col-sm-3">From:</dt>
-        <dd className="col col-sm-9">
-          <AccountLink
-            address={getAddressFromAddressHash(transaction.data.from)}
-          />
-        </dd>
         <dt className="col col-sm-3">To:</dt>
         <table className="table">
           <thead className="thead-dark">
@@ -60,12 +48,23 @@ class Transaction extends Component {
     )
   }
 
+  renderLockTransaction = (transaction) => {
+    return (
+      <dl className="row">
+        <dt className="col col-sm-3">Lock:</dt>
+        <dd className="col col-sm-9">{toFixed8(transaction.data.locks)}</dd>
+      </dl>
+    );
+  }
+
   renderTransactionData = (transaction) => {
     switch (transaction.type) {
-      case 1:
+      case TransactionType.Reward:
         return this.renderRewardTransaction(transaction);
-      case 2:
+      case TransactionType.Transfer:
         return this.renderTransferTransaction(transaction);
+      case TransactionType.Lock:
+        return this.renderLockTransaction(transaction);
       default:
         return (<div></div>);
     }
@@ -92,6 +91,12 @@ class Transaction extends Component {
           <dd className="col col-sm-9">
             {moment.unix(transaction.created_time).fromNow()}
             ({moment.unix(transaction.created_time).format("YYYY-MM-DD HH:mm Z")})
+          </dd>
+          <dt className="col col-sm-3">From:</dt>
+          <dd className="col col-sm-9">
+            <AccountLink
+              address={getAddressFromAddressHash(transaction.data.from)}
+            />
           </dd>
         </dl>
         {this.renderTransactionData(transaction)}

@@ -4,6 +4,7 @@ export const LOGIN_WITH_PRIVATE_KEY = 'LOGIN_WITH_PRIVATE_KEY';
 export const LOGOUT = 'LOGOUT';
 export const SHOW_KEYSTORE_INPUT_MODAL = 'SHOW_KEYSTORE_INPUT_MODAL';
 export const SHOW_SEND_TRANSACTION_MODAL = 'SHOW_SEND_TRANSACTION_MODAL';
+export const SHOW_LOCK_TRANSACTION_MODAL = 'SHOW_LOCK_TRANSACTION_MODAL';
 
 export const loginWithPrivateKey = (privateKey) => ({
   type: LOGIN_WITH_PRIVATE_KEY,
@@ -31,3 +32,8 @@ export const showSendTransactionModal = (show) => ({
   type: SHOW_SEND_TRANSACTION_MODAL,
   show
 });
+
+export const showLockTransactionModal = (show) => ({
+  type: SHOW_LOCK_TRANSACTION_MODAL,
+  show
+})

@@ -61,9 +61,9 @@ exports.loadBlock = (height) => {
   });
 }
 
-exports.sendTo = (bytes) => {
+exports.addTransaction = (bytes) => {
   return new Promise((resolve, reject) => {
-    axios.post(`${host}/transaction/sendto`, { 
+    axios.post(`${host}/transaction/add`, { 
       bytes: bytes
     })
     .then((res) => {

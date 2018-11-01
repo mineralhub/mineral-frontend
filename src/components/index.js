@@ -3,6 +3,7 @@ import BlockList from './BlockList/BlockList.js';
 import TransactionList from './TransactionList/TransactionList.js';
 import Transaction from './Transaction/Transaction.js'
 import Block from './Block/Block.js';
+import RegisterDelegate from './Delegate/RegisterDelegate.js'; 
 
 export {
   Header,
@@ -10,4 +11,5 @@ export {
   TransactionList,
   Transaction,
   Block,
+  RegisterDelegate
 };

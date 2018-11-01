@@ -15,6 +15,8 @@ export const getTxTypeString = (tx) => {
     case 4: return "RegisterDelegateTransaction";
     case 5: return "OtherSignTransaction";
     case 6: return "SignTransaction";
+    case 7: return "LockTransaction";
+    case 8: return "UnlockTransaction";
     default: return "Uknown Transaction";
   }
 }

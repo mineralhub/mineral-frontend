@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { login, logout, showKeystoreInputModal, showSendTransactionModal } from '../../actions/app';
+import { login, logout, showKeystoreInputModal, showSendTransactionModal, showLockTransactionModal } from '../../actions/app';
 import { AccountLink, CreateAccountLink } from '../../common/Links';
 import { toFixed8 } from '../../common/Blockchain';
 import { Link } from "react-router-dom";
@@ -57,6 +57,10 @@ class Header extends Component {
     this.props.showSendTransactionModal(true);
   }
 
+  onLockTransaction = () => {
+    this.props.showLockTransactionModal(true);
+  }
+
   onClickLogout = () => {
     this.props.logout();
     this.setState({
@@ -100,6 +104,12 @@ class Header extends Component {
                     className="btn btn-primary btn-block mt-3"
                     onClick={this.onSendTransaction}>
                     Send
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-block mt-3"
+                    onClick={this.onLockTransaction}>
+                    Lock
                   </button>
                   <button
                     type="button"
@@ -194,6 +204,7 @@ const mapDispatchToProps = {
   login,
   logout,
   showKeystoreInputModal,
-  showSendTransactionModal
+  showSendTransactionModal,
+  showLockTransactionModal
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

@@ -3,20 +3,22 @@ import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
 import { Header } from './components';
-import { HomeContainer, TransactionContainer, BlockContainer, AccountContainer, CreateAccountContainer } from './containers';
+import { HomeContainer, TransactionContainer, BlockContainer, AccountContainer, CreateAccountContainer, RegisterDelegateContainer, DelegateListContainer } from './containers';
 import { ToastContainer } from "react-toastify";
 import InputPasswordModal from './components/Account/InputPasswordModal';
-import { login, showKeystoreInputModal, showSendTransactionModal } from './actions/app';
+import { login, showKeystoreInputModal, showSendTransactionModal, showLockTransactionModal } from './actions/app';
 import { toast } from 'react-toastify';
 import { toFixed8Long, encryptKey, decryptString, generateMac } from './common/Blockchain';
 import SendTransactionModal from './components/Transaction/SendTransactionModal';
+import LockTransactionModal from './components/Transaction/LockTransactionModal';
 
 import {
   TransferTransaction,
+  LockTransaction,
   Transaction,
   TransactionType
 } from './common/Transaction';
-import { sendTo } from './actions/blockchain';
+import { addTransaction } from './actions/blockchain';
 
 export class AppCmp extends Component {
   renderModal = () => {
@@ -66,7 +68,7 @@ export class AppCmp extends Component {
             tx.setTimestamp();
             tx.sign(account.key);
 
-            this.props.sendTo([...tx.toBuffer()])
+            this.props.addTransaction([...tx.toBuffer()])
             .then((result) => {
               console.log(result);
               toast.success("successed. transfer transaction.", { position: toast.POSITION.BOTTOM_RIGHT });
@@ -75,6 +77,39 @@ export class AppCmp extends Component {
             .catch((e) => {
               console.log(e);
               toast.error('failed. transfer transaction.', { position: toast.POSITION.BOTTOM_RIGHT });
+            });
+          }
+        }
+      />
+
+      <LockTransactionModal
+        isOpen={showModal.lockTransaction}
+        onClose={
+          () => {
+            this.props.showLockTransactionModal(false);
+          }
+        }
+        onConfirm={
+          (state) => {
+            let lock = new LockTransaction(account.address);
+            lock.lockValue = toFixed8Long(state.amount);
+            if (lock.lockValue === undefined) {
+              toast.error('invalid amount.', { position: toast.POSITION.BOTTOM_RIGHT });
+              return;
+            }
+            let tx = new Transaction(TransactionType.Lock, lock);
+            tx.setTimestamp();
+            tx.sign(account.key);
+
+            this.props.addTransaction([...tx.toBuffer()])
+            .then((result) => {
+              console.log(result);
+              toast.success("successed. lock transaction.", { position: toast.POSITION.BOTTOM_RIGHT });
+              this.props.showLockTransactionModal(false);
+            })
+            .catch((e) => {
+              console.log(e);
+              toast.error('failed. lock transaction.', { position: toast.POSITION.BOTTOM_RIGHT });
             });
           }
         }
@@ -94,6 +129,8 @@ export class AppCmp extends Component {
             <Route path="/block/:height" component={BlockContainer} />
             <Route path="/account/create" component={CreateAccountContainer} />
             <Route path="/account/:address" component={AccountContainer} />
+            <Route path="/delegate/register" component={RegisterDelegateContainer} />
+            <Route path="/delegatelist" component={DelegateListContainer} />
           </Switch>
           <ToastContainer />
           {this.renderModal()}
@@ -108,7 +145,8 @@ const mapStateToProps = (state) => {
     account: state.app.account,
     keystore: state.app.keystore,
     showModal: {
-      sendTransaction: state.app.showModal.sendTransaction
+      sendTransaction: state.app.showModal.sendTransaction,
+      lockTransaction: state.app.showModal.lockTransaction
     }
   };
 };
@@ -117,7 +155,8 @@ const mapDispatchToProps = {
   login,
   showKeystoreInputModal,
   showSendTransactionModal,
-  sendTo
+  showLockTransactionModal,
+  addTransaction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppCmp);
