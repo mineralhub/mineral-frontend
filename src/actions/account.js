@@ -8,9 +8,10 @@ export const SET_ACCOUNT_FAILURE = 'SET_ACCOUNT_FAILURE';
 
 const cli = require('./../client/nodeClient');
 
-export const setBalance = (balance) => ({
+export const setBalance = (balance, lock) => ({
   type: SET_BALANCE,
-  balance: balance.balance
+  balance: balance,
+  lock: lock
 });
 
 export const setActiveAccount = (address) => ({
@@ -41,7 +42,7 @@ export const loadBalance = () => async (dispatch, getState) => {
   if (app.account.isLoggedIn) {
     try {
       let res = await cli.loadBalance(app.account.address.toString('hex'));
-      dispatch(setBalance(res.data));
+      dispatch(setBalance(res.data.balance, res.data.lock));
     }
     catch (e) {
       throw e;

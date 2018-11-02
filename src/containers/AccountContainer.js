@@ -8,6 +8,14 @@ import AccountTransactionList from '../components/Account/AccountTransactionList
 import { toast } from 'react-toastify';
 
 export class AccountContainer extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      address: ''
+    };
+  }
+  
   componentDidMount() {
     let { match } = this.props;
     this.load(match.params.address);
@@ -22,6 +30,9 @@ export class AccountContainer extends Component {
 
   load = async (address) => {
     const {dispatch} = this.props;
+    this.setState({
+      address: address
+    });
     dispatch(await loadAccount(address));
     dispatch(await loadTransactionFromAddress(address, 1));
   }
@@ -34,7 +45,7 @@ export class AccountContainer extends Component {
       );
     } else if (setTransactionsFromAddress === SET_TRANSACTIONS_FROM_ADDRESS_SUCCESS) {
       return (
-        <AccountTransactionList />
+        <AccountTransactionList address={this.state.address}/>
       );
     } else if (setTransactionsFromAddress === SET_TRANSACTIONS_FROM_ADDRESS_FAILURE){
       toast.error("load account transaction error.", {position: toast.POSITION.BOTTOM_RIGHT})
@@ -66,8 +77,7 @@ export class AccountContainer extends Component {
 function mapStateToProps(state) {
   return {
     setAccount: state.network.setAccount,
-    setTransactionsFromAddress: state.network.setTransactionsFromAddress,
-    account: state.app.account
+    setTransactionsFromAddress: state.network.setTransactionsFromAddress
   };
 }
 

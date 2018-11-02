@@ -6,6 +6,7 @@ import { toFixed8 } from '../../common/Blockchain';
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { readFileContentsFromEvent, KEYSTORE_EXTENSION } from '../../common/File';
+import { Label, Button } from 'reactstrap';
 
 class Header extends Component {
   constructor(props) {
@@ -74,11 +75,17 @@ class Header extends Component {
     let { active } = this.props;
     if (active.balance !== undefined) {
       return (
-        <label>balance : {toFixed8(active.balance)}</label>
+        <div>
+          <Label style={{display:"block"}}>balance : {toFixed8(active.balance)}</Label>
+          <Label style={{display:"block", lineHeight:"0em"}}>lock : {toFixed8(active.lock)}</Label>
+        </div>
       )
     } else {
       return (
-        <label>balance : LOADING...</label>
+        <div>
+          <Label style={{display:"block"}}>balance : LOADING...</Label>
+          <Label style={{display:"block", lineHeight:"0em"}}>lock : LOADING...</Label>
+        </div>
       )
     }
   }
@@ -90,7 +97,7 @@ class Header extends Component {
         <div className="collapse navbar-collapse dual-collapse2">
           <ul className="nav navbar-nav flex-row justify-content-between ml-auto">
             <li className="dropdown order-1">
-              <button type="button" id="dropdownMenu1" data-toggle="dropdown" className="btn btn-outline-secondary dropdown-toggle">Account<span className="caret"></span></button>
+              <Button type="button" id="dropdownMenu1" data-toggle="dropdown" className="btn btn-outline-secondary dropdown-toggle">Account<span className="caret"></span></Button>
               <ul className="dropdown-menu dropdown-menu-right mt-2" style={{ width: 320 }}>
                 <li className="px-3 py-2 mb-2">
                   <div className="text-center">
@@ -99,24 +106,24 @@ class Header extends Component {
                       {this.renderBalance()}
                     </small>
                   </div>
-                  <button
-                    type="button"
-                    className="btn btn-primary btn-block mt-3"
+                  <Button
+                    color="primary" 
+                    className="btn btn-block mt-3"
                     onClick={this.onSendTransaction}>
                     Send
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-primary btn-block mt-3"
+                  </Button>
+                  <Button
+                    color="primary" 
+                    className="btn btn-block mt-3"
                     onClick={this.onLockTransaction}>
                     Lock
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-primary btn-block mt-3"
+                  </Button>
+                  <Button
+                    color="primary" 
+                    className="btn btn-block mt-3"
                     onClick={this.onClickLogout}>
                     Logout
-                  </button>
+                  </Button>
                 </li>
               </ul>
             </li>
@@ -128,7 +135,7 @@ class Header extends Component {
         <div className="collapse navbar-collapse dual-collapse2">
           <ul className="nav navbar-nav flex-row justify-content-between ml-auto">
             <li className="dropdown order-1">
-              <button type="button" id="dropdownMenu1" data-toggle="dropdown" className="btn btn-outline-secondary dropdown-toggle">Login<span className="caret"></span></button>
+              <Button type="button" id="dropdownMenu1" data-toggle="dropdown" className="btn btn-outline-secondary dropdown-toggle">Login<span className="caret"></span></Button>
               <ul className="dropdown-menu dropdown-menu-right mt-2" style={{ width: 320 }}>
                 <li className="px-3 py-2 mb-2">
                   <div className="form-group">
@@ -139,23 +146,23 @@ class Header extends Component {
                       placeholder="input private key"
                       onChange={this.onChangePrivateKey}>
                     </input>
-                    <button
-                    type="button"
-                    className="btn btn-primary btn-block mt-3"
+                    <Button
+                    color="primary"
+                    className="btn-block mt-3"
                     disabled={!this.isLoginValid()}
                     onClick={this.onClickLogin}>
                     Login
-                    </button>
+                    </Button>
                   </div>
                   <hr />
                   <div className="form-group">
                     <div className="text-center"><p>Keystore File</p></div>
-                    <button
-                    type="button"
-                    className="btn btn-primary btn-block mt-3"
+                    <Button
+                    color="primary"
+                    className="btn-block mt-3"
                     onClick={this.onClickOpenKeystore}>
                     Open Keystore
-                    </button>
+                    </Button>
                     <input type="file" ref={this.fileRef} className="d-none"
                       onChange={this.onSelectedFile}
                       accept={KEYSTORE_EXTENSION} />

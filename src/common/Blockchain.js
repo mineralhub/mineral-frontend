@@ -26,6 +26,10 @@ export const toFixed8 = (v) => {
     return false;
   }
   let str = String(v);
+  while (str.length < 9) {
+    str = '0' + str;
+  }
+
   return str.slice(0, str.length - 8) + '.' + str.slice(str.length - 8);
 }
 

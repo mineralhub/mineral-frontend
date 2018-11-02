@@ -3,9 +3,11 @@ import { SET_ACTIVE_ACCOUNT, SET_ACCOUNT, SET_BALANCE } from '../actions/account
 const initialState = {
   address: undefined,
   balance: undefined,
+  lock: undefined,
   active: {
     address: undefined,
-    balance: undefined
+    balance: undefined,
+    lock: undefined
   }
 };
 
@@ -24,7 +26,8 @@ export function account(state = initialState, action) {
 			return {
         ...state,
         address: action.address,
-        balance: action.account.balance
+        balance: action.account.balance,
+        lock: action.account.lock
 			}
     }
     
@@ -33,7 +36,8 @@ export function account(state = initialState, action) {
         ...state, 
         active: {
           ...state.active,
-          balance: action.balance
+          balance: action.balance,
+          lock: action.lock
         }
       }
     }
