@@ -105,6 +105,9 @@ class AccountTransactionList extends Component {
 
   render() {
     let { transactions } = this.props;
+    if (transactions === undefined) {
+      return (<div></div>);
+    }
     return (
       <table className="table">
         <thead className="thead-dark">

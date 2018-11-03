@@ -6,7 +6,7 @@ import { TransactionLink, AccountLink, BlockLink } from '../../common/Links';
 import moment from 'moment';
 
 class Transaction extends Component {
-  renderRewardTransaction = (transaction) => {
+  renderReward = (transaction) => {
     return (
       <dl className="row">
         <dt className="col col-sm-3">To:</dt>
@@ -15,7 +15,7 @@ class Transaction extends Component {
     );
   }
 
-  renderTransferTransaction = (transaction) => {
+  renderTransfer = (transaction) => {
     return (
       <dl className="row">
         <dt className="col col-sm-3">To:</dt>
@@ -48,7 +48,17 @@ class Transaction extends Component {
     )
   }
 
-  renderLockTransaction = (transaction) => {
+  renderRegisterDelegate = (transaction) => {
+    console.log(transaction);
+    return (
+      <dl className="row">
+        <dt className="col col-sm-3">Name:</dt>
+        <dd className="col col-sm-9">{(transaction.data.name)}</dd>
+      </dl>
+    );
+  }
+
+  renderLock = (transaction) => {
     return (
       <dl className="row">
         <dt className="col col-sm-3">Lock:</dt>
@@ -60,11 +70,13 @@ class Transaction extends Component {
   renderTransactionData = (transaction) => {
     switch (transaction.type) {
       case TransactionType.Reward:
-        return this.renderRewardTransaction(transaction);
+        return this.renderReward(transaction);
       case TransactionType.Transfer:
-        return this.renderTransferTransaction(transaction);
+        return this.renderTransfer(transaction);
+      case TransactionType.RegisterDelegate:
+        return this.renderRegisterDelegate(transaction);
       case TransactionType.Lock:
-        return this.renderLockTransaction(transaction);
+        return this.renderLock(transaction);
       default:
         return (<div></div>);
     }

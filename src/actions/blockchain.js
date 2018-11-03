@@ -113,7 +113,7 @@ export const loadTransactionFromAddress = (address, page) => {
 		try {
 			dispatch(setTransactionsFromAddressPending());
 			let res = await cli.loadTransactionFromAddress(address, page);
-			dispatch(setTransactionsFromAddress(res.data));
+			dispatch(setTransactionsFromAddress(res.data === '' ? undefined : res.data));
 			dispatch(setTransactionsFromAddressSuccess());
 		} catch (e) {
 			dispatch(setTransactionsFromAddressFailure());

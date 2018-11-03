@@ -51,6 +51,7 @@ export const loadActiveBalance = () => async (dispatch, getState) => {
   if (account.active.address) {
     try {
       let res = await cli.loadBalance(account.active.address.toString('hex'));
+      console.log(res);
       dispatch(setActiveBalance(res.data.balance, res.data.lock));
     }
     catch (e) {

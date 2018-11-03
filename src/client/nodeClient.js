@@ -1,6 +1,11 @@
 const axios = require('axios');
 var host = 'http://127.0.0.1:80';
 
+exports.ErrorCode = {
+  TxDelegateNameInvalid: 2200,
+  TxDelegateAlreadyRegister: 2201
+}
+
 exports.loadBalance = (address) => {
   return new Promise((resolve, reject) => {
     axios.get(`${host}/account/balance/${address}`)
@@ -67,7 +72,10 @@ exports.addTransaction = (bytes) => {
       bytes: bytes
     })
     .then((res) => {
-      resolve(res);
+      if (res.data.error) {
+        throw res.data.error;
+      }
+      resolve(res.data);
     })
     .catch((e) => {
       reject(e);

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { showKeystoreInputModal, showSendTransactionModal, showLockTransactionModal } from '../../actions/app';
 import { login, logout } from '../../actions/account';
-import { AccountLink, CreateAccountLink } from '../../common/Links';
+import { AccountLink, CreateAccountLink, RegisterDelegateLink } from '../../common/Links';
 import { toFixed8 } from '../../common/Blockchain';
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
@@ -119,6 +119,7 @@ class Header extends Component {
                     onClick={this.onLockTransaction}>
                     Lock
                   </Button>
+                  <RegisterDelegateLink />
                   <Button
                     color="primary" 
                     className="btn btn-block mt-3"

@@ -16,3 +16,7 @@ export const AccountLink = ({address, text=address}) => (
 export const CreateAccountLink = ({text='Create Account'}) => (
   <Link className="btn btn-primary btn-block" to="/account/create">{text}</Link>
 );
+
+export const RegisterDelegateLink = ({text='Register Delegate'}) => (
+  <Link className="btn btn-primary btn-block mt-3" to={`/delegate/register`}>{text}</Link>
+);
