@@ -1,4 +1,4 @@
-import { SHOW_KEYSTORE_INPUT_MODAL, SHOW_SEND_TRANSACTION_MODAL, SHOW_LOCK_TRANSACTION_MODAL } from '../actions/app';
+import { SHOW_KEYSTORE_INPUT_MODAL, SHOW_SEND_TRANSACTION_MODAL, SHOW_LOCK_TRANSACTION_MODAL, SHOW_UNLOCK_TRANSACTION_MODAL } from '../actions/app';
 
 const initialState = {
   account: {
@@ -8,7 +8,9 @@ const initialState = {
   },
   keystore: undefined,
   showModal: {
-    sendTransaction: false
+    sendTransaction: false,
+    lockTransaction: false,
+    unlockTransaction: false,
   }
 };
 
@@ -35,6 +37,15 @@ export function app(state = initialState, action) {
         showModal: {
           ...state.showModal,
           lockTransaction: action.show
+        }
+      }
+    }
+    case SHOW_UNLOCK_TRANSACTION_MODAL: {
+      return {
+        ...state,
+        showModal: {
+          ...state.showModal,
+          unlockTransaction: action.show
         }
       }
     }

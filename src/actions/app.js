@@ -1,6 +1,7 @@
 export const SHOW_KEYSTORE_INPUT_MODAL = 'SHOW_KEYSTORE_INPUT_MODAL';
 export const SHOW_SEND_TRANSACTION_MODAL = 'SHOW_SEND_TRANSACTION_MODAL';
 export const SHOW_LOCK_TRANSACTION_MODAL = 'SHOW_LOCK_TRANSACTION_MODAL';
+export const SHOW_UNLOCK_TRANSACTION_MODAL = 'SHOW_UNLOCK_TRANSACTION_MODAL';
 
 export const showKeystoreInputModal = (keystore) => ({
   type: SHOW_KEYSTORE_INPUT_MODAL,
@@ -14,5 +15,10 @@ export const showSendTransactionModal = (show) => ({
 
 export const showLockTransactionModal = (show) => ({
   type: SHOW_LOCK_TRANSACTION_MODAL,
+  show
+})
+
+export const showUnlockTransactionModal = (show) => ({
+  type: SHOW_UNLOCK_TRANSACTION_MODAL,
   show
 })

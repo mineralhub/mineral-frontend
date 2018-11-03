@@ -2,8 +2,16 @@ const axios = require('axios');
 var host = 'http://127.0.0.1:80';
 
 exports.ErrorCode = {
-  TxDelegateNameInvalid: 2200,
-  TxDelegateAlreadyRegister: 2201
+  E_TX_NOT_ENOUGH_LOCKBALANCE: 2000,
+  E_TX_NO_LOCK_BALANCE: 2001,
+  E_TX_LOCK_VALUE_CANNOT_NEGATIVE: 2002,
+  E_TX_LOCK_TTL_NOT_ARRIVED: 2003,
+
+  E_TX_VOTE_TTL_NOT_ARRIVED: 2100,
+  E_TX_VOTE_OVERCOUNT: 2101,
+
+  E_TX_DELEGATE_NAME_INVALID: 2200,
+  E_TX_DELEGATE_ALREADY_REGISTER: 2201
 }
 
 exports.loadBalance = (address) => {

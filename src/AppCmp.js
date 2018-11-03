@@ -6,20 +6,23 @@ import { Header } from './components';
 import { HomeContainer, TransactionContainer, BlockContainer, AccountContainer, CreateAccountContainer, RegisterDelegateContainer, DelegateListContainer } from './containers';
 import { ToastContainer } from "react-toastify";
 import InputPasswordModal from './components/Account/InputPasswordModal';
-import { showKeystoreInputModal, showSendTransactionModal, showLockTransactionModal } from './actions/app';
+import { showKeystoreInputModal, showSendTransactionModal, showLockTransactionModal, showUnlockTransactionModal } from './actions/app';
 import { login } from './actions/account';
 import { toast } from 'react-toastify';
 import { toFixed8Long, encryptKey, decryptString, generateMac } from './common/Blockchain';
 import SendTransactionModal from './components/Transaction/SendTransactionModal';
 import LockTransactionModal from './components/Transaction/LockTransactionModal';
+import UnlockTransactionModal from './components/Transaction/UnlockTransactionModal';
 
 import {
   TransferTransaction,
   LockTransaction,
+  UnlockTransaction,
   Transaction,
   TransactionType
 } from './common/Transaction';
 import { addTransaction } from './actions/blockchain';
+import { ErrorCode } from './client/nodeClient';
 
 export class AppCmp extends Component {
   renderModal = () => {
@@ -99,16 +102,42 @@ export class AppCmp extends Component {
             let tx = new Transaction(TransactionType.Lock, lock);
             tx.setTimestamp();
             tx.sign(active.key);
-
             this.props.addTransaction([...tx.toBuffer()])
             .then((result) => {
-              console.log(result);
               toast.success("successed. lock transaction.", { position: toast.POSITION.BOTTOM_RIGHT });
               this.props.showLockTransactionModal(false);
             })
             .catch((e) => {
-              console.log(e);
               toast.error('failed. lock transaction.', { position: toast.POSITION.BOTTOM_RIGHT });
+            });
+          }
+        }
+      />
+
+      <UnlockTransactionModal 
+        isOpen={showModal.unlockTransaction}
+        onClose={
+          () => {
+            this.props.showUnlockTransactionModal(false);
+          }
+        }
+        onConfirm={
+          () => {
+            let tx = new Transaction(TransactionType.Unlock, new UnlockTransaction(active.address));
+            tx.setTimestamp();
+            tx.sign(active.key);
+            this.props.addTransaction([...tx.toBuffer()])
+            .then((result) => {
+              toast.success("successed. unlock transaction.", { position: toast.POSITION.BOTTOM_RIGHT });
+              this.props.showUnlockTransactionModal(false);
+            })
+            .catch((e) => {
+              this.props.showUnlockTransactionModal(false);
+              if (e.code === ErrorCode.E_TX_LOCK_TTL_NOT_ARRIVED) {
+                toast.error('failed. unlock transaction. TTL', { position: toast.POSITION.BOTTOM_RIGHT });  
+                return;
+              }
+              toast.error('failed. unlock transaction.', { position: toast.POSITION.BOTTOM_RIGHT });
             });
           }
         }
@@ -143,10 +172,7 @@ const mapStateToProps = (state) => {
   return {
     active: state.account.active,
     keystore: state.app.keystore,
-    showModal: {
-      sendTransaction: state.app.showModal.sendTransaction,
-      lockTransaction: state.app.showModal.lockTransaction
-    }
+    showModal: state.app.showModal
   };
 };
 
@@ -155,6 +181,7 @@ const mapDispatchToProps = {
   showKeystoreInputModal,
   showSendTransactionModal,
   showLockTransactionModal,
+  showUnlockTransactionModal,
   addTransaction,
 };
 

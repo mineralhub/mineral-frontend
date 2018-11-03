@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { showKeystoreInputModal, showSendTransactionModal, showLockTransactionModal } from '../../actions/app';
+import { showKeystoreInputModal, showSendTransactionModal, showLockTransactionModal, showUnlockTransactionModal } from '../../actions/app';
 import { login, logout } from '../../actions/account';
 import { AccountLink, CreateAccountLink, RegisterDelegateLink } from '../../common/Links';
 import { toFixed8 } from '../../common/Blockchain';
@@ -63,6 +63,10 @@ class Header extends Component {
     this.props.showLockTransactionModal(true);
   }
 
+  onUnlockTransaction = () => {
+    this.props.showUnlockTransactionModal(true);
+  }
+
   onClickLogout = () => {
     this.props.logout();
     this.setState({
@@ -93,6 +97,7 @@ class Header extends Component {
 
   renderAccount = () => {
     let { active } = this.props;
+    console.log(active);
     if (active.address) {
       return (
         <div className="collapse navbar-collapse dual-collapse2">
@@ -119,6 +124,13 @@ class Header extends Component {
                     onClick={this.onLockTransaction}>
                     Lock
                   </Button>
+                  <Button
+                    color="primary" 
+                    className="btn btn-block mt-3"
+                    disabled={active.lock === "0"}
+                    onClick={this.onUnlockTransaction}>
+                    Unlock
+                  </Button>                  
                   <RegisterDelegateLink />
                   <Button
                     color="primary" 
@@ -214,6 +226,7 @@ const mapDispatchToProps = {
   logout,
   showKeystoreInputModal,
   showSendTransactionModal,
-  showLockTransactionModal
+  showLockTransactionModal,
+  showUnlockTransactionModal
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
