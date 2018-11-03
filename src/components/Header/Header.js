@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { login, logout, showKeystoreInputModal, showSendTransactionModal, showLockTransactionModal } from '../../actions/app';
+import { showKeystoreInputModal, showSendTransactionModal, showLockTransactionModal } from '../../actions/app';
+import { login, logout } from '../../actions/account';
 import { AccountLink, CreateAccountLink } from '../../common/Links';
 import { toFixed8 } from '../../common/Blockchain';
 import { Link } from "react-router-dom";
@@ -91,8 +92,8 @@ class Header extends Component {
   }
 
   renderAccount = () => {
-    let { account } = this.props;
-    if (account.isLoggedIn) {
+    let { active } = this.props;
+    if (active.address) {
       return (
         <div className="collapse navbar-collapse dual-collapse2">
           <ul className="nav navbar-nav flex-row justify-content-between ml-auto">
@@ -102,7 +103,7 @@ class Header extends Component {
                 <li className="px-3 py-2 mb-2">
                   <div className="text-center">
                     <small>
-                      <AccountLink address={account.address} text={account.address} />
+                      <AccountLink address={active.address} text={active.address} />
                       {this.renderBalance()}
                     </small>
                   </div>

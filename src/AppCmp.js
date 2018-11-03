@@ -6,7 +6,8 @@ import { Header } from './components';
 import { HomeContainer, TransactionContainer, BlockContainer, AccountContainer, CreateAccountContainer, RegisterDelegateContainer, DelegateListContainer } from './containers';
 import { ToastContainer } from "react-toastify";
 import InputPasswordModal from './components/Account/InputPasswordModal';
-import { login, showKeystoreInputModal, showSendTransactionModal, showLockTransactionModal } from './actions/app';
+import { showKeystoreInputModal, showSendTransactionModal, showLockTransactionModal } from './actions/app';
+import { login } from './actions/account';
 import { toast } from 'react-toastify';
 import { toFixed8Long, encryptKey, decryptString, generateMac } from './common/Blockchain';
 import SendTransactionModal from './components/Transaction/SendTransactionModal';
@@ -22,7 +23,7 @@ import { addTransaction } from './actions/blockchain';
 
 export class AppCmp extends Component {
   renderModal = () => {
-    let { account, keystore, showModal } = this.props;
+    let { active, keystore, showModal } = this.props;
     return (
       <div>
       <InputPasswordModal
@@ -58,7 +59,7 @@ export class AppCmp extends Component {
         }
         onConfirm={
           (state) => {
-            let transfer = new TransferTransaction(account.address);
+            let transfer = new TransferTransaction(active.address);
             transfer.to[state.to] = toFixed8Long(state.amount);
             if (transfer.to[state.to] === undefined) {
               toast.error('invalid amount.', { position: toast.POSITION.BOTTOM_RIGHT });
@@ -66,16 +67,14 @@ export class AppCmp extends Component {
             }
             let tx = new Transaction(TransactionType.Transfer, transfer);
             tx.setTimestamp();
-            tx.sign(account.key);
+            tx.sign(active.key);
 
             this.props.addTransaction([...tx.toBuffer()])
             .then((result) => {
-              console.log(result);
               toast.success("successed. transfer transaction.", { position: toast.POSITION.BOTTOM_RIGHT });
               this.props.showSendTransactionModal(false);
             })
             .catch((e) => {
-              console.log(e);
               toast.error('failed. transfer transaction.', { position: toast.POSITION.BOTTOM_RIGHT });
             });
           }
@@ -91,7 +90,7 @@ export class AppCmp extends Component {
         }
         onConfirm={
           (state) => {
-            let lock = new LockTransaction(account.address);
+            let lock = new LockTransaction(active.address);
             lock.lockValue = toFixed8Long(state.amount);
             if (lock.lockValue === undefined) {
               toast.error('invalid amount.', { position: toast.POSITION.BOTTOM_RIGHT });
@@ -99,7 +98,7 @@ export class AppCmp extends Component {
             }
             let tx = new Transaction(TransactionType.Lock, lock);
             tx.setTimestamp();
-            tx.sign(account.key);
+            tx.sign(active.key);
 
             this.props.addTransaction([...tx.toBuffer()])
             .then((result) => {
@@ -142,7 +141,7 @@ export class AppCmp extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    account: state.app.account,
+    active: state.account.active,
     keystore: state.app.keystore,
     showModal: {
       sendTransaction: state.app.showModal.sendTransaction,

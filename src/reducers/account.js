@@ -1,10 +1,13 @@
-import { SET_ACTIVE_ACCOUNT, SET_ACCOUNT, SET_BALANCE } from '../actions/account';
+import { publicKeyCreate } from 'secp256k1';
+import { getAddressFromPubKey } from '../common/Blockchain';
+import { LOGIN_WITH_PRIVATE_KEY, LOGOUT, SET_ACCOUNT, SET_ACTIVE_BALANCE } from '../actions/account';
 
 const initialState = {
   address: undefined,
   balance: undefined,
   lock: undefined,
   active: {
+    key: undefined,
     address: undefined,
     balance: undefined,
     lock: undefined
@@ -13,12 +16,21 @@ const initialState = {
 
 export function account(state = initialState, action) {
   switch (action.type) {
-    case SET_ACTIVE_ACCOUNT: {
+    case LOGIN_WITH_PRIVATE_KEY: {
       return {
         ...state,
         active: {
-          address: action.address
+          ...state.active,
+          key: action.prikey,
+          address: getAddressFromPubKey(publicKeyCreate(Buffer.from(action.prikey, 'hex'), false)),
         }
+      }
+    }
+
+    case LOGOUT: {
+      return {
+        ...state,
+        active: initialState.active,
       }
     }
 
@@ -31,7 +43,7 @@ export function account(state = initialState, action) {
 			}
     }
     
-    case SET_BALANCE: {
+    case SET_ACTIVE_BALANCE: {
       return {
         ...state, 
         active: {

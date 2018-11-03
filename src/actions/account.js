@@ -1,6 +1,6 @@
-export const SET_BALANCE = 'SET_BALANCE';
-
-export const SET_ACTIVE_ACCOUNT = 'SET_ACTIVE_ACCOUNT';
+export const LOGOUT = 'LOGOUT';
+export const LOGIN_WITH_PRIVATE_KEY = 'LOGIN_WITH_PRIVATE_KEY';
+export const SET_ACTIVE_BALANCE = 'SET_ACTIVE_BALANCE';
 export const SET_ACCOUNT = 'SET_ACCOUNT';
 export const SET_ACCOUNT_PENDING = 'SET_ACCOUNT_PENDING';
 export const SET_ACCOUNT_SUCCESS = 'SET_ACCOUNT_SUCCESS';
@@ -8,16 +8,16 @@ export const SET_ACCOUNT_FAILURE = 'SET_ACCOUNT_FAILURE';
 
 const cli = require('./../client/nodeClient');
 
-export const setBalance = (balance, lock) => ({
-  type: SET_BALANCE,
+export const loginWithPrivateKey = (prikey) => ({
+  type: LOGIN_WITH_PRIVATE_KEY,
+  prikey
+});
+
+export const setActiveBalance = (balance, lock) => ({
+  type: SET_ACTIVE_BALANCE,
   balance: balance,
   lock: lock
 });
-
-export const setActiveAccount = (address) => ({
-  type: SET_ACTIVE_ACCOUNT,
-  address
-})
 
 export const setAccount = (address, account) => ({
   type: SET_ACCOUNT,
@@ -37,12 +37,21 @@ export const setAccountFailure = () => ({
   type: SET_ACCOUNT_FAILURE
 });
 
-export const loadBalance = () => async (dispatch, getState) => {
-  let {app} = getState();
-  if (app.account.isLoggedIn) {
+export const login = (prikey) => async (dispatch, getState) => {
+  await dispatch(loginWithPrivateKey(prikey));
+  await dispatch(loadActiveBalance());
+};
+
+export const logout = () => ({
+  type: LOGOUT
+});
+
+export const loadActiveBalance = () => async (dispatch, getState) => {
+  let {account} = getState();
+  if (account.active.address) {
     try {
-      let res = await cli.loadBalance(app.account.address.toString('hex'));
-      dispatch(setBalance(res.data.balance, res.data.lock));
+      let res = await cli.loadBalance(account.active.address.toString('hex'));
+      dispatch(setActiveBalance(res.data.balance, res.data.lock));
     }
     catch (e) {
       throw e;
