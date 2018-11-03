@@ -1,6 +1,4 @@
-import { publicKeyCreate } from 'secp256k1';
 import { SHOW_KEYSTORE_INPUT_MODAL, SHOW_SEND_TRANSACTION_MODAL, SHOW_LOCK_TRANSACTION_MODAL } from '../actions/app';
-import { getAddressFromPubKey } from '../common/Blockchain';
 
 const initialState = {
   account: {
