@@ -42,11 +42,11 @@ export class RegisterDelegateContainer extends Component {
                 .catch((e) => {
                   console.log(e);
                   if (e.code) {
-                    if (e.code === ErrorCode.TxDelegateAlreadyRegister) {
+                    if (e.code === ErrorCode.E_TX_DELEGATE_ALREADY_REGISTER) {
                       toast.error('Already Register', { position: toast.POSITION.BOTTOM_RIGHT });
                       this.props.history.push('/');
                       return;
-                    } else if (e.code === ErrorCode.TxDelegateNameInvalid) {
+                    } else if (e.code === ErrorCode.E_TX_DELEGATE_NAME_INVALID) {
                       toast.error('Invalid Name', { position: toast.POSITION.BOTTOM_RIGHT });
                       return;
                     }
