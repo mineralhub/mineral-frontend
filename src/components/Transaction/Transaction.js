@@ -29,7 +29,6 @@ class Transaction extends Component {
           <tbody>
             {
               transaction.data.to.map((v, idx) => {
-                console.log(v);
                 return (
                   <tr key={idx}>
                     <td scope="row">
@@ -49,7 +48,6 @@ class Transaction extends Component {
   }
 
   renderRegisterDelegate = (transaction) => {
-    console.log(transaction);
     return (
       <dl className="row">
         <dt className="col col-sm-3">Name:</dt>
@@ -67,6 +65,15 @@ class Transaction extends Component {
     );
   }
 
+  renderUnlock = (transaction) => {
+    return (
+      <dl className="row">
+        <dt className="col col-sm-3">Unlock:</dt>
+        <dd className="col col-sm-9">{toFixed8(transaction.sub_data.lock)}</dd>
+      </dl>
+    );
+  }
+
   renderTransactionData = (transaction) => {
     switch (transaction.type) {
       case TransactionType.Reward:
@@ -77,6 +84,8 @@ class Transaction extends Component {
         return this.renderRegisterDelegate(transaction);
       case TransactionType.Lock:
         return this.renderLock(transaction);
+      case TransactionType.Unlock:
+        return this.renderUnlock(transaction);
       default:
         return (<div></div>);
     }

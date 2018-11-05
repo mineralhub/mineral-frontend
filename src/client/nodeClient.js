@@ -1,5 +1,5 @@
 const axios = require('axios');
-var host = 'http://127.0.0.1:80';
+var host = 'http://127.0.0.1:8080';
 
 exports.ErrorCode = {
   E_TX_NOT_ENOUGH_LOCKBALANCE: 2000,

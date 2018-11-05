@@ -97,7 +97,6 @@ class Header extends Component {
 
   renderAccount = () => {
     let { active } = this.props;
-    console.log(active);
     if (active.address) {
       return (
         <div className="collapse navbar-collapse dual-collapse2">

@@ -6,7 +6,6 @@ import { AccountLink } from '../../common/Links';
 class Account extends Component {
   render() {
     let { account } = this.props;
-    console.log(account);
     return (
       <dl className="row">
         <dt className="col col-sm-3">Address:</dt>

@@ -15,6 +15,14 @@ var TransactionType = {
   Unlock: 8
 }
 
+var EnumToString = (e, v) => {
+  for (let k in e) {
+    if (e[k] == v) 
+      return k;
+  }
+  return null;
+}
+
 var addrToHash = (addr) => {
   let buf = base58Check.decode(addr);
   if (buf.length !== 21)
@@ -297,6 +305,7 @@ class Transaction {
 
 module.exports = {
   TransactionType,
+  EnumToString,
   TransactionBase,
   RewardTransaction,
   TransferTransaction,

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { toFixed8, getAddressFromAddressHash } from '../../common/Blockchain';
 import moment from 'moment';
 import { TransactionLink, AccountLink } from '../../common/Links';
-import { TransactionType } from '../../common/Transaction';
+import { TransactionType, EnumToString } from '../../common/Transaction';
 
 class AccountTransactionList extends Component {
   renderAccountLink = (addr) => {
@@ -18,6 +18,7 @@ class AccountTransactionList extends Component {
         <td scope="row">
           <TransactionLink hash={tx.hash} text={tx.hash.substr(0, 20) + '...'} />
         </td>
+        <td>{EnumToString(TransactionType, tx.type)}</td>
         <td>{moment.unix(tx.created_time).fromNow()}</td>
         <td>-</td>
         <td>{this.renderAccountLink(getAddressFromAddressHash(tx.data.from))}</td>
@@ -68,11 +69,27 @@ class AccountTransactionList extends Component {
         <td scope="row">
           <TransactionLink hash={tx.hash} text={tx.hash.substr(0, 20) + '...'} />
         </td>
+        <td>{EnumToString(TransactionType, tx.type)}</td>
         <td>{moment.unix(tx.created_time).fromNow()}</td>
         <td>{this.renderAccountLink(from)}</td>
         <td>{this.renderTansferTo(change, tx)}</td>
         <td>{toFixed8(change)}</td>
       </tr>
+    )
+  }
+
+  renderRegisterDelegate = (tx, index) => {
+    return (
+      <tr key={index}>
+        <td scope="row">
+          <TransactionLink hash={tx.hash} text={tx.hash.substr(0, 20) + '...'} />
+        </td>
+        <td>{EnumToString(TransactionType, tx.type)}</td>
+        <td>{moment.unix(tx.created_time).fromNow()}</td>
+        <td>{this.renderAccountLink(getAddressFromAddressHash(tx.data.from))}</td>
+        <td>-</td>
+        <td>-</td>
+      </tr>      
     )
   }
 
@@ -82,11 +99,27 @@ class AccountTransactionList extends Component {
         <td scope="row">
           <TransactionLink hash={tx.hash} text={tx.hash.substr(0, 20) + '...'} />
         </td>
+        <td>{EnumToString(TransactionType, tx.type)}</td>
         <td>{moment.unix(tx.created_time).fromNow()}</td>
         <td>{this.renderAccountLink(getAddressFromAddressHash(tx.data.from))}</td>
         <td>-</td>
         <td>{toFixed8(-tx.data.locks)}</td>
       </tr>
+    )
+  }
+
+  renderUnlock = (tx, index) => {
+    return (
+      <tr key={index}>
+        <td scope="row">
+          <TransactionLink hash={tx.hash} text={tx.hash.substr(0, 20) + '...'} />
+        </td>
+        <td>{EnumToString(TransactionType, tx.type)}</td>
+        <td>{moment.unix(tx.created_time).fromNow()}</td>
+        <td>{this.renderAccountLink(getAddressFromAddressHash(tx.data.from))}</td>
+        <td>-</td>
+        <td>{toFixed8(tx.sub_data.lock)}</td>
+      </tr>      
     )
   }
 
@@ -96,8 +129,12 @@ class AccountTransactionList extends Component {
         return this.renderReward(tx, index);
       case TransactionType.Transfer:
         return this.renderTransfer(tx, index);
+      case TransactionType.RegisterDelegate:
+        return this.renderRegisterDelegate(tx, index);
       case TransactionType.Lock:
         return this.renderLock(tx, index);
+      case TransactionType.Unlock:
+        return this.renderUnlock(tx, index);
       default:
         return (<div></div>);
     }
@@ -113,6 +150,7 @@ class AccountTransactionList extends Component {
         <thead className="thead-dark">
           <tr>
             <th scope="col">Hash</th>
+            <th scope="col">Type</th>
             <th scope="col">Age</th>
             <th scope="col">From</th>
             <th scope="col">To</th>

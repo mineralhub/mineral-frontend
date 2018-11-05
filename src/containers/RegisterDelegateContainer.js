@@ -40,7 +40,6 @@ export class RegisterDelegateContainer extends Component {
                   this.props.history.push('/');
                 })
                 .catch((e) => {
-                  console.log(e);
                   if (e.code) {
                     if (e.code === ErrorCode.E_TX_DELEGATE_ALREADY_REGISTER) {
                       toast.error('Already Register', { position: toast.POSITION.BOTTOM_RIGHT });
