@@ -5,6 +5,7 @@ import AccountContainer from './AccountContainer.js';
 import CreateAccountContainer from './CreateAccountContainer.js';
 import RegisterDelegateContainer from './RegisterDelegateContainer.js';
 import DelegateListContainer from './DelegateListContainer.js';
+import VoteContainer from './VoteContainer.js';
 
 export {
     HomeContainer,
@@ -13,5 +14,6 @@ export {
     AccountContainer,
     CreateAccountContainer,
     RegisterDelegateContainer,
-    DelegateListContainer
+    DelegateListContainer,
+    VoteContainer
 };

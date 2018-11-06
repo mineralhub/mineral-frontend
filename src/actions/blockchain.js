@@ -15,6 +15,11 @@ export const SET_BLOCK_SUCCESS = 'SET_BLOCK_SUCCESS';
 export const SET_BLOCK_FAILURE = 'SET_BLOCK_FAILURE';
 export const SET_BLOCK = 'SET_BLOCK';
 
+export const SET_DELEGATES_PENDING = 'SET_DELEGATES_PENDING';
+export const SET_DELEGATES_SUCCESS = 'SET_DELEGATES_SUCCESS';
+export const SET_DELEGATES_FAILURE = 'SET_DELEGATES_FAILURE';
+export const SET_DELEGATES = 'SET_DELEGATES';
+
 const cli = require('./../client/nodeClient');
 
 export const setBlocks = (blocks = []) => ({
@@ -78,6 +83,23 @@ export const setBlockFailure = () => ({
 	type: SET_BLOCK_FAILURE
 });
 
+export const setDelegates = (delegates) => ({
+	type: SET_DELEGATES,
+	delegates
+});
+
+export const setDelegatesPending = () => ({
+	type: SET_DELEGATES_PENDING
+});
+
+export const setDelegatesSuccess = () => ({
+	type: SET_DELEGATES_SUCCESS
+});
+
+export const setDelegatesFailure = () => ({
+	type: SET_DELEGATES_FAILURE
+});
+
 export const loadBlocks = (socket) => {
 	return (dispatch) => {
 		socket.on('lastblocks', (recv) => {
@@ -131,6 +153,20 @@ export const loadBlock = (height) => {
 			dispatch(setBlockSuccess());
 		} catch (e) {
 			dispatch(setBlockFailure());
+			throw e;
+		}
+	}
+}
+
+export const loadDelegates = () => {
+	return async (dispatch) => {
+		try {
+			dispatch(setDelegatesPending());
+			let res = await cli.loadDelegates();
+			dispatch(setDelegates(res.data));
+			dispatch(setDelegatesSuccess());
+		} catch (e) {
+			dispatch(setDelegatesFailure());
 			throw e;
 		}
 	}

@@ -3,7 +3,14 @@ import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
 import { Header } from './components';
-import { HomeContainer, TransactionContainer, BlockContainer, AccountContainer, CreateAccountContainer, RegisterDelegateContainer, DelegateListContainer } from './containers';
+import { HomeContainer, 
+  TransactionContainer, 
+  BlockContainer, 
+  AccountContainer, 
+  CreateAccountContainer, 
+  RegisterDelegateContainer, 
+  DelegateListContainer,
+  VoteContainer } from './containers';
 import { ToastContainer } from "react-toastify";
 import InputPasswordModal from './components/Account/InputPasswordModal';
 import { showKeystoreInputModal, showSendTransactionModal, showLockTransactionModal, showUnlockTransactionModal } from './actions/app';
@@ -159,6 +166,7 @@ export class AppCmp extends Component {
             <Route path="/account/:address" component={AccountContainer} />
             <Route path="/delegate/register" component={RegisterDelegateContainer} />
             <Route path="/delegatelist" component={DelegateListContainer} />
+            <Route path="/vote" component={VoteContainer} />
           </Switch>
           <ToastContainer />
           {this.renderModal()}

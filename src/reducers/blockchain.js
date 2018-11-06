@@ -1,7 +1,8 @@
-import { SET_BLOCKS, SET_TRANSACTIONS, SET_TRANSACTION, SET_BLOCK, SET_TRANSACTIONS_FROM_ADDRESS	} from '../actions/blockchain';
+import { SET_BLOCKS, SET_TRANSACTIONS, SET_TRANSACTION, SET_BLOCK, SET_DELEGATES, SET_TRANSACTIONS_FROM_ADDRESS	} from '../actions/blockchain';
 
 const initialState = {
-	blocks: []
+	blocks: [],
+	delegates: []
 };
 
 export function blockchain(state = initialState, action) {
@@ -30,7 +31,12 @@ export function blockchain(state = initialState, action) {
 				block: action.block,
 			}
 		}
-
+		case SET_DELEGATES: {
+			return {
+				...state,
+				delegates: action.delegates
+			}
+		}
 		case SET_TRANSACTIONS_FROM_ADDRESS: {
 			return {
 				...state,

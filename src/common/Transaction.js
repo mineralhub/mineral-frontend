@@ -17,7 +17,7 @@ var TransactionType = {
 
 var EnumToString = (e, v) => {
   for (let k in e) {
-    if (e[k] == v) 
+    if (e[k] === v) 
       return k;
   }
   return null;

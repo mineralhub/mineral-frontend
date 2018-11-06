@@ -1,7 +1,9 @@
 import { SET_TRANSACTION_PENDING, SET_TRANSACTION_FAILURE, SET_TRANSACTION_SUCCESS, 
   SET_BLOCK_PENDING, SET_BLOCK_FAILURE, SET_BLOCK_SUCCESS,
-  SET_TRANSACTIONS_FROM_ADDRESS_PENDING, SET_TRANSACTIONS_FROM_ADDRESS_FAILURE, SET_TRANSACTIONS_FROM_ADDRESS_SUCCESS } from "../actions/blockchain";
+  SET_TRANSACTIONS_FROM_ADDRESS_PENDING, SET_TRANSACTIONS_FROM_ADDRESS_FAILURE, SET_TRANSACTIONS_FROM_ADDRESS_SUCCESS,
+  SET_DELEGATES_PENDING, SET_DELEGATES_SUCCESS, SET_DELEGATES_FAILURE } from "../actions/blockchain";
 import { SET_ACCOUNT_PENDING, SET_ACCOUNT_FAILURE, SET_ACCOUNT_SUCCESS } from "../actions/account";
+import { bindActionCreators } from "redux";
 
 const initialState = {
   setBlock: undefined,
@@ -44,6 +46,15 @@ export function network(state = initialState, action) {
       return {
         ...state,
         setAccount: action.type
+      }
+    }
+
+    case SET_DELEGATES_PENDING:
+    case SET_DELEGATES_SUCCESS:
+    case SET_DELEGATES_FAILURE: {
+      return {
+        ...state,
+        setDelegates: action.type
       }
     }
 

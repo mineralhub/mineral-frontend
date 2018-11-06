@@ -74,6 +74,18 @@ exports.loadBlock = (height) => {
   });
 }
 
+exports.loadDelegates = () => {
+  return new Promise((resolve, reject) => {
+    axios.get(`${host}/delegate/all`)
+    .then((res) => {
+      resolve(res);
+    })
+    .catch((e) => {
+      reject(e);
+    })
+  });
+}
+
 exports.addTransaction = (bytes) => {
   return new Promise((resolve, reject) => {
     axios.post(`${host}/transaction/add`, { 
