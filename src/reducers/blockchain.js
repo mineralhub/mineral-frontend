@@ -34,7 +34,7 @@ export function blockchain(state = initialState, action) {
 		case SET_DELEGATES: {
 			return {
 				...state,
-				delegates: action.delegates
+				delegates: action.delegates.delegates
 			}
 		}
 		case SET_TRANSACTIONS_FROM_ADDRESS: {

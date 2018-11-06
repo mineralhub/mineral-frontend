@@ -32,7 +32,7 @@ export class VoteContainer extends Component {
 			return (
 				<div className="container">
 					<div className="vote">
-						<Vote delegates={delegates}></Vote>
+						<Vote delegates={delegates} active={active} ></Vote>
 					</div>
 				</div>
 			);

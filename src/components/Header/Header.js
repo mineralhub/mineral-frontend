@@ -204,6 +204,9 @@ class Header extends Component {
             <li className="nav-item">
               <Link to='/' className="nav-link">Home</Link>
             </li>
+            <li className="nav-item">
+              <Link to='/vote' className="nav-link">Vote</Link>
+            </li>
           </ul>
         </div>
         {this.renderAccount()}
