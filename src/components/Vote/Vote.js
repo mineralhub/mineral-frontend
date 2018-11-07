@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Table, Button } from 'reactstrap';
 import { AccountLink } from '../../common/Links';
 import { toast } from 'react-toastify';
+import { toFixed8, toFixed8Long } from '../../common/Blockchain';
 
 class Vote extends Component {
   constructor(props) {
@@ -15,11 +16,18 @@ class Vote extends Component {
   }
 
   isConfirmValid = () => {
-    for (let k in this.state.vote) {
-      if (0 < this.state.vote[k])
-        return true;
+    let { vote } = this.state;
+    let { active } = this.props;
+    let total = 0;
+    for (let k in vote) {
+      if (toFixed8Long(vote[k]) === undefined) {
+        return false;
+      }
+      total += Number(vote[k]);
     }
-    return false;
+    if (Number(toFixed8(active.lock)) < total)
+      return false;
+    return true;
   }
 
   onConfirm = () => {
@@ -40,16 +48,19 @@ class Vote extends Component {
     });
   }
 
-  onAddVote = (address, v) => {
-
-  }
-
   onChangeVote = (address, v) => {
     let vote = this.state.vote;
     vote[address] = v;
     this.setState({
       vote: vote
     });
+  }
+
+  getVotingCount = () => {
+    let cnt = 0;
+    for (let k in this.state.vote)
+      cnt += this.state.vote[k];
+    return cnt;
   }
 
   renderStartVote() {
@@ -70,7 +81,7 @@ class Vote extends Component {
   }
 
   render() {
-    let { delegates, active } = this.props;
+    let { delegates } = this.props;
     let { vote } = this.state;
     if (delegates === undefined) {
       return (<div></div>)
@@ -114,26 +125,12 @@ class Vote extends Component {
                       (this.state.voting) &&
                       <td>
                         <div className="input-group small align-middle">
-                          <div className="input-group-prepend">
-                            <Button
-                              className="btn-outline-danger"
-                              onClick={() => { this.onAddVote(v.address, 1) }}>
-                              -
-                              </Button>
-                          </div>
                           <input
                             type="text"
                             value={vote[v.address] || ""}
                             className="form-control text-center align-middle"
                             onChange={(e) => this.onChangeVote(v.address, e.target.value)}
                           />
-                          <div className="input-group-append">
-                            <Button
-                              className="btn-outline-danger"
-                              onClick={() => { this.onAddVote(v.address, -1) }}>
-                              +
-                              </Button>
-                          </div>
                         </div>
                       </td>
                     }
@@ -150,6 +147,7 @@ class Vote extends Component {
               className="btn float-right"
               color="primary"
               onClick={this.onConfirm}
+              disabled={!this.isConfirmValid()}
             >
               Confirm
             </Button>
@@ -162,6 +160,7 @@ class Vote extends Component {
 
 function mapStateToProps(state) {
   return {
+    active: state.account.active
   };
 }
 
