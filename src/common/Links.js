@@ -9,8 +9,8 @@ export const BlockLink = ({height, text=height}) => (
   <Link to={`/block/${height}`}>{text}</Link>
 );
 
-export const AccountLink = ({address, text=address}) => (
-  <Link to={`/account/${address}`}>{text}</Link>
+export const AccountLink = ({address, text=address, className=""}) => (
+  <Link className={className} to={`/account/${address}`}>{text}</Link>
 );
 
 export const CreateAccountLink = ({text='Create Account'}) => (

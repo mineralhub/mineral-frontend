@@ -20,7 +20,7 @@ class Transaction extends Component {
       <dl className="row">
         <dt className="col col-sm-3">To:</dt>
         <table className="table">
-          <thead className="thead-dark">
+          <thead className="thead-light">
             <tr>
               <th scope="col">Address</th>
               <th scope="col">Amount</th>

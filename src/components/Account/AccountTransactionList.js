@@ -147,7 +147,7 @@ class AccountTransactionList extends Component {
     }
     return (
       <table className="table">
-        <thead className="thead-dark">
+        <thead className="thead-light">
           <tr>
             <th scope="col">Hash</th>
             <th scope="col">Type</th>
