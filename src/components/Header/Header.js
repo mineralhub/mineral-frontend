@@ -208,9 +208,6 @@ class Header extends Component {
         <div className="collapse navbar-collapse dual-collapse2">
           <ul className="nav navbar-nav">
             <li className="nav-item">
-              <Link to='/' className="nav-link">Home</Link>
-            </li>
-            <li className="nav-item">
               <Link to='/vote' className="nav-link">Vote</Link>
             </li>
           </ul>
