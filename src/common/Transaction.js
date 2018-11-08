@@ -15,6 +15,10 @@ var TransactionType = {
   Unlock: 8
 }
 
+const DefaultFee = 100000000;
+const RegisterDelegateFee = DefaultFee * 10000;
+const VoteFee = 100000000;
+
 var EnumToString = (e, v) => {
   for (let k in e) {
     if (e[k] === v) 
@@ -34,7 +38,7 @@ var addrToHash = (addr) => {
 
 class TransactionBase {
   constructor(from) {
-    this.fee = new Int64(0); // 8 byte (Fixed8)
+    this.fee = new Int64(DefaultFee); // 8 byte (Fixed8)
     this.from = from; // 20 byte (UInt160 address hash)
   }
 
@@ -97,6 +101,7 @@ class TransferTransaction extends TransactionBase {
 class VoteTransaction extends TransactionBase {
   constructor(from) {
     super(from);
+    this.fee = new Int64(VoteFee);
     this.votes = {}; // key: 20 byte (UInt160 address hash), value : 8 byte (Fixed8) = 28 * n
   }
 
@@ -124,6 +129,7 @@ class VoteTransaction extends TransactionBase {
 class RegisterDelegateTransaction extends TransactionBase {
   constructor(from) {
     super(from);
+    this.fee = new Int64(RegisterDelegateFee);
     this.name = undefined; // dynamic size (byte array)
   }
   

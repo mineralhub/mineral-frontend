@@ -158,17 +158,15 @@ export const loadBlock = (height) => {
 	}
 }
 
-export const loadDelegates = () => {
-	return async (dispatch) => {
-		try {
-			dispatch(setDelegatesPending());
-			let res = await cli.loadDelegates();
-			dispatch(setDelegates(res.data));
-			dispatch(setDelegatesSuccess());
-		} catch (e) {
-			dispatch(setDelegatesFailure());
-			throw e;
-		}
+export const loadDelegates = () => async (dispatch) => {
+	try {
+		dispatch(setDelegatesPending());
+		let res = await cli.loadDelegates();
+		dispatch(setDelegates(res.data));
+		dispatch(setDelegatesSuccess());
+	} catch (e) {
+		dispatch(setDelegatesFailure());
+		throw e;
 	}
 }
 

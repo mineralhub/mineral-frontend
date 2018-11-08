@@ -24,6 +24,7 @@ export class HomeContainer extends Component {
     return (
       <div className="home">
         <div className="container">
+          <p>Mineral Blockchain test page.</p>
           <div className="row">
             <div className="col-md">
               @ Block List

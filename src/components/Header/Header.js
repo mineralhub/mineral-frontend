@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { showKeystoreInputModal, showSendTransactionModal, showLockTransactionModal, showUnlockTransactionModal } from '../../actions/app';
-import { login, logout } from '../../actions/account';
+import { login, logout, loadActiveBalance } from '../../actions/account';
 import { AccountLink, CreateAccountLink, RegisterDelegateLink } from '../../common/Links';
 import { toFixed8 } from '../../common/Blockchain';
 import { Link } from "react-router-dom";
@@ -111,6 +111,12 @@ class Header extends Component {
                       {this.renderBalance()}
                     </small>
                   </div>
+                  <Button
+                    color="primary" 
+                    className="btn btn-block mt-3"
+                    onClick={() => this.props.loadActiveBalance()}>
+                    Refresh
+                  </Button>
                   <Button
                     color="primary" 
                     className="btn btn-block mt-3"
@@ -226,6 +232,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   login,
   logout,
+  loadActiveBalance,
   showKeystoreInputModal,
   showSendTransactionModal,
   showLockTransactionModal,

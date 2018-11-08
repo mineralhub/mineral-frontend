@@ -22,7 +22,7 @@ class AccountTransactionList extends Component {
         <td>{moment.unix(tx.created_time).fromNow()}</td>
         <td>-</td>
         <td>{this.renderAccountLink(getAddressFromAddressHash(tx.data.from))}</td>
-        <td>{toFixed8(tx.data.reward)}</td>
+        <td>{toFixed8(tx.data.reward - tx.data.fee)}</td>
       </tr>
     )
   }
@@ -53,7 +53,7 @@ class AccountTransactionList extends Component {
     let from = getAddressFromAddressHash(tx.data.from);
     if (from === this.props.address) {
       for (let addr in tx.data.to) {
-        change -= tx.data.to[addr].amount;
+        change -= tx.data.to[addr].amount + tx.data.fee;
       }
     } else {
       for (let i in tx.data.to) {
@@ -88,7 +88,7 @@ class AccountTransactionList extends Component {
         <td>{moment.unix(tx.created_time).fromNow()}</td>
         <td>{this.renderAccountLink(getAddressFromAddressHash(tx.data.from))}</td>
         <td>-</td>
-        <td>-</td>
+        <td>-{toFixed8(tx.data.fee)}</td>
       </tr>      
     )
   }
@@ -103,7 +103,7 @@ class AccountTransactionList extends Component {
         <td>{moment.unix(tx.created_time).fromNow()}</td>
         <td>{this.renderAccountLink(getAddressFromAddressHash(tx.data.from))}</td>
         <td>-</td>
-        <td>{toFixed8(-tx.data.locks)}</td>
+        <td>{toFixed8(-(tx.data.locks + tx.data.fee))}</td>
       </tr>
     )
   }
@@ -118,8 +118,23 @@ class AccountTransactionList extends Component {
         <td>{moment.unix(tx.created_time).fromNow()}</td>
         <td>{this.renderAccountLink(getAddressFromAddressHash(tx.data.from))}</td>
         <td>-</td>
-        <td>{toFixed8(tx.sub_data.lock)}</td>
+        <td>{toFixed8(tx.sub_data.lock - tx.data.fee)}</td>
       </tr>      
+    )
+  }
+
+  renderVote = (tx, index) => {
+    return (
+      <tr key={index}>
+        <td scope="row">
+          <TransactionLink hash={tx.hash} text={tx.hash.substr(0, 20) + '...'} />
+        </td>
+        <td>{EnumToString(TransactionType, tx.type)}</td>
+        <td>{moment.unix(tx.created_time).fromNow()}</td>
+        <td>{this.renderAccountLink(getAddressFromAddressHash(tx.data.from))}</td>
+        <td>-</td>
+        <td>{-toFixed8(tx.data.fee)}</td>        
+      </tr>
     )
   }
 
@@ -135,6 +150,8 @@ class AccountTransactionList extends Component {
         return this.renderLock(tx, index);
       case TransactionType.Unlock:
         return this.renderUnlock(tx, index);
+      case TransactionType.Vote:
+        return this.renderVote(tx, index);
       default:
         return (<div></div>);
     }

@@ -88,7 +88,7 @@ class Vote extends Component {
     }
     let allvote = 0;
     for (let k in delegates) {
-      allvote += delegates[k].total_vote;
+      allvote += Number(toFixed8(delegates[k].total_vote));
     }
     return (
       <div>
@@ -118,9 +118,9 @@ class Vote extends Component {
                         <AccountLink className="small text-muted" address={v.address} />
                       </div>
                     </td>
-                    <td className="small text-center align-middle has-border">{v.round_vote}</td>
-                    <td className="small text-center align-middle">{v.total_vote}</td>
-                    <td className="small text-center align-middle">{"0" === v.total_vote ? 0 : (v.total_vote / allvote).toFixed(2)}</td>
+                    <td className="small text-center align-middle has-border">{toFixed8(v.round_vote)}</td>
+                    <td className="small text-center align-middle">{toFixed8(v.total_vote)}</td>
+                    <td className="small text-center align-middle">{"0" === v.total_vote ? 0 : (Number(toFixed8(v.total_vote)) / allvote * 100).toFixed(2)}%</td>
                     {
                       (this.state.voting) &&
                       <td>
