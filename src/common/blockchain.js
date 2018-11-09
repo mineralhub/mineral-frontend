@@ -62,11 +62,11 @@ module.exports.toPubkey = (prikey) => {
     yhex = "0" + yhex;
   }
   let pubkeyhex = "04" + xhex + yhex;
-  return new Buffer(pubkeyhex, 'hex');
+  return Buffer.from(pubkeyhex, 'hex');
 }
 
 module.exports.toAddress = (pubkey) => {
-  let buf = new Buffer(21);
+  let buf = Buffer.alloc(21);
   buf[0] = 0;
   let sha = crypto.createHash('sha256').update(pubkey).digest();
   let rip = new RIPEMD160().update(sha).digest();
@@ -75,10 +75,10 @@ module.exports.toAddress = (pubkey) => {
 }
 
 module.exports.toAddressFromHash = (hash) => {
-  let buf = new Buffer(21);
+  let buf = Buffer.alloc(21);
   buf[0] = 0;
   if (typeof(hash) === 'string') {
-    hash = new Buffer(hash, 'hex');
+    hash = Buffer.from(hash, 'hex');
   }
   hash.copy(buf, 1, 0, 20);
   return bs58Encode(buf); 
@@ -92,7 +92,7 @@ module.exports.generatePrivateKey = () => {
   while (priKeyHex.length < 64) {
     priKeyHex = "0" + priKeyHex;
   }
-  return new Buffer(priKeyHex, "hex");
+  return Buffer.from(priKeyHex, "hex");
 }
 
 module.exports.generateAccount = () => {
@@ -108,16 +108,16 @@ module.exports.generateAccount = () => {
 
 module.exports.encryptKey = (password, params, alg = "scrypt") => {
   if (alg === "scrypt")
-    return scrypt(new Buffer(password, 'utf8'), new Buffer(params.salt, 'hex'), params.n, params.r, params.p, params.dklen);
+    return scrypt(Buffer.from(password, 'utf8'), Buffer.from(params.salt, 'hex'), params.n, params.r, params.p, params.dklen);
   else
     return null;
 }
 
 module.exports.encryptString = (text, key, iv, alg = "aes-128-ctr") => {
   if (typeof text === "string")
-    text = new Buffer(text, "hex");
+    text = Buffer.from(text, "hex");
   if (typeof iv === "string")
-    iv = new Buffer(iv, "hex");
+    iv = Buffer.from(iv, "hex");
 
   let cipher = crypto.createCipheriv(alg, key.slice(0, 16), iv);
   let ciphertext = cipher.update(text);
@@ -125,15 +125,15 @@ module.exports.encryptString = (text, key, iv, alg = "aes-128-ctr") => {
 }
 
 module.exports.generateMac = (text, password) => {
-  let buf = Buffer.concat([password.slice(16, 32), new Buffer(text, 'hex')]);
+  let buf = Buffer.concat([password.slice(16, 32), Buffer.from(text, 'hex')]);
   return keccak('keccak256').update(buf).digest().toString('hex');
 }
 
 module.exports.decryptString = (text, key, iv, alg = "aes-128-ctr") => {
   if (typeof text === "string")
-    text = new Buffer(text, "hex");
+    text = Buffer.from(text, "hex");
   if (typeof iv === "string")
-    iv = new Buffer(iv, "hex");
+    iv = Buffer.from(iv, "hex");
 
   let decipher = crypto.createDecipheriv(alg, key.slice(0, 16), iv);
   let deciphertext = decipher.update(text);
