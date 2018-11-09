@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { getTxTypeString, toFixed8, getAddressFromAddressHash } from '../../common/Blockchain';
+import { toTransactionTypeStr, toFixed8Str, toAddressFromHash } from '../../common/blockchain';
 import { TransactionType } from '../../common/Transaction';
 import { TransactionLink, AccountLink, BlockLink } from '../../common/Links';
 import moment from 'moment';
@@ -10,7 +10,7 @@ class Transaction extends Component {
     return (
       <dl className="row">
         <dt className="col col-sm-3">To:</dt>
-        <dd className="col col-sm-9">{toFixed8(transaction.data.reward)}</dd>
+        <dd className="col col-sm-9">{toFixed8Str(transaction.data.reward)}</dd>
       </dl>
     );
   }
@@ -33,10 +33,10 @@ class Transaction extends Component {
                   <tr key={idx}>
                     <td scope="row">
                       <AccountLink
-                        address={getAddressFromAddressHash(v.addr)}
+                        address={toAddressFromHash(v.addr)}
                       />
                     </td>
-                    <td>{toFixed8(v.amount)}</td>
+                    <td>{toFixed8Str(v.amount)}</td>
                   </tr>
                 )
               })
@@ -60,7 +60,7 @@ class Transaction extends Component {
     return (
       <dl className="row">
         <dt className="col col-sm-3">Lock:</dt>
-        <dd className="col col-sm-9">{toFixed8(transaction.data.locks)}</dd>
+        <dd className="col col-sm-9">{toFixed8Str(transaction.data.locks)}</dd>
       </dl>
     );
   }
@@ -69,7 +69,7 @@ class Transaction extends Component {
     return (
       <dl className="row">
         <dt className="col col-sm-3">Unlock:</dt>
-        <dd className="col col-sm-9">{toFixed8(transaction.sub_data.lock)}</dd>
+        <dd className="col col-sm-9">{toFixed8Str(transaction.sub_data.lock)}</dd>
       </dl>
     );
   }
@@ -97,7 +97,7 @@ class Transaction extends Component {
       <div className="container">
         <dl className="row">
           <dt className="col col-sm-3">Type:</dt>
-          <dd className="col col-sm-9">{getTxTypeString(transaction.type)}</dd>
+          <dd className="col col-sm-9">{toTransactionTypeStr(transaction.type)}</dd>
           <dt className="col col-sm-3">Hash:</dt>
           <dd className="col col-sm-9">
             <TransactionLink
@@ -116,7 +116,7 @@ class Transaction extends Component {
           <dt className="col col-sm-3">From:</dt>
           <dd className="col col-sm-9">
             <AccountLink
-              address={getAddressFromAddressHash(transaction.data.from)}
+              address={toAddressFromHash(transaction.data.from)}
             />
           </dd>
         </dl>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { toFixed8 } from '../../common/Blockchain';
+import { toFixed8Str } from '../../common/blockchain';
 import { AccountLink } from '../../common/Links';
 
 class Account extends Component {
@@ -11,9 +11,9 @@ class Account extends Component {
         <dt className="col col-sm-3">Address:</dt>
         <dd className="col col-sm-9"><AccountLink address={account.address} /></dd>
         <dt className="col col-sm-3">Balance:</dt>
-        <dd className="col col-sm-9">{toFixed8(account.balance)}</dd>
+        <dd className="col col-sm-9">{toFixed8Str(account.balance)}</dd>
         <dt className="col col-sm-3">Lock:</dt>
-        <dd className="col col-sm-9">{toFixed8(account.lock)}</dd>
+        <dd className="col col-sm-9">{toFixed8Str(account.lock)}</dd>
       </dl>
     );
   }

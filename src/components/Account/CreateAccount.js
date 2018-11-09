@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import ReactPasswordStrength from "react-password-strength";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { generateAccount, encryptKey, encryptString, generateMac } from '../../common/Blockchain';
+import { generateAccount, encryptKey, encryptString, generateMac } from '../../common/blockchain';
 import { toast } from 'react-toastify';
 import crypto from 'crypto';
 import { downloadStringAsFile, KEYSTORE_EXTENSION } from '../../common/File';

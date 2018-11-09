@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Table, Button } from 'reactstrap';
 import { AccountLink } from '../../common/Links';
 import { toast } from 'react-toastify';
-import { toFixed8, toFixed8Long } from '../../common/Blockchain';
+import { toFixed8Str, toFixed8Long } from '../../common/blockchain';
 
 class Vote extends Component {
   constructor(props) {
@@ -25,7 +25,7 @@ class Vote extends Component {
       }
       total += Number(vote[k]);
     }
-    if (Number(toFixed8(active.lock)) < total)
+    if (Number(toFixed8Str(active.lock)) < total)
       return false;
     return true;
   }
@@ -88,7 +88,7 @@ class Vote extends Component {
     }
     let allvote = 0;
     for (let k in delegates) {
-      allvote += Number(toFixed8(delegates[k].total_vote));
+      allvote += Number(toFixed8Str(delegates[k].total_vote));
     }
     return (
       <div>
@@ -118,9 +118,9 @@ class Vote extends Component {
                         <AccountLink className="small text-muted" address={v.address} />
                       </div>
                     </td>
-                    <td className="small text-center align-middle has-border">{toFixed8(v.round_vote)}</td>
-                    <td className="small text-center align-middle">{toFixed8(v.total_vote)}</td>
-                    <td className="small text-center align-middle">{"0" === v.total_vote ? 0 : (Number(toFixed8(v.total_vote)) / allvote * 100).toFixed(2)}%</td>
+                    <td className="small text-center align-middle has-border">{toFixed8Str(v.round_vote)}</td>
+                    <td className="small text-center align-middle">{toFixed8Str(v.total_vote)}</td>
+                    <td className="small text-center align-middle">{"0" === v.total_vote ? 0 : (Number(toFixed8Str(v.total_vote)) / allvote * 100).toFixed(2)}%</td>
                     {
                       (this.state.voting) &&
                       <td>

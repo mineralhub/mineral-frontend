@@ -93,11 +93,13 @@ exports.addTransaction = (bytes) => {
     })
     .then((res) => {
       if (res.data.error) {
+        console.log(res);
         throw res.data.error;
       }
       resolve(res.data);
     })
     .catch((e) => {
+      console.log(e);
       reject(e);
     })
   });

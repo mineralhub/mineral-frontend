@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { toFixed8, getAddressFromAddressHash } from '../../common/Blockchain';
+import { toFixed8Str, toAddressFromHash } from '../../common/blockchain';
 import moment from 'moment';
 import { TransactionLink, AccountLink } from '../../common/Links';
 import { TransactionType, EnumToString } from '../../common/Transaction';
@@ -21,8 +21,8 @@ class AccountTransactionList extends Component {
         <td>{EnumToString(TransactionType, tx.type)}</td>
         <td>{moment.unix(tx.created_time).fromNow()}</td>
         <td>-</td>
-        <td>{this.renderAccountLink(getAddressFromAddressHash(tx.data.from))}</td>
-        <td>{toFixed8(tx.data.reward - tx.data.fee)}</td>
+        <td>{this.renderAccountLink(toAddressFromHash(tx.data.from))}</td>
+        <td>{toFixed8Str(tx.data.reward - tx.data.fee)}</td>
       </tr>
     )
   }
@@ -35,7 +35,7 @@ class AccountTransactionList extends Component {
           <p>number of {tx.data.to.length}</p>
         )
       } else {
-        let addr = getAddressFromAddressHash(tx.data.to[0].addr);
+        let addr = toAddressFromHash(tx.data.to[0].addr);
         return (
           this.renderAccountLink(addr)
         )
@@ -50,14 +50,14 @@ class AccountTransactionList extends Component {
 
   renderTransfer = (tx, index) => {
     let change = 0;
-    let from = getAddressFromAddressHash(tx.data.from);
+    let from = toAddressFromHash(tx.data.from);
     if (from === this.props.address) {
       for (let addr in tx.data.to) {
         change -= tx.data.to[addr].amount + tx.data.fee;
       }
     } else {
       for (let i in tx.data.to) {
-        if (this.props.address === getAddressFromAddressHash(tx.data.to[i].addr)) {
+        if (this.props.address === toAddressFromHash(tx.data.to[i].addr)) {
           change = tx.data.to[i].amount;
           break;
         }
@@ -73,7 +73,7 @@ class AccountTransactionList extends Component {
         <td>{moment.unix(tx.created_time).fromNow()}</td>
         <td>{this.renderAccountLink(from)}</td>
         <td>{this.renderTansferTo(change, tx)}</td>
-        <td>{toFixed8(change)}</td>
+        <td>{toFixed8Str(change)}</td>
       </tr>
     )
   }
@@ -86,9 +86,9 @@ class AccountTransactionList extends Component {
         </td>
         <td>{EnumToString(TransactionType, tx.type)}</td>
         <td>{moment.unix(tx.created_time).fromNow()}</td>
-        <td>{this.renderAccountLink(getAddressFromAddressHash(tx.data.from))}</td>
+        <td>{this.renderAccountLink(toAddressFromHash(tx.data.from))}</td>
         <td>-</td>
-        <td>-{toFixed8(tx.data.fee)}</td>
+        <td>-{toFixed8Str(tx.data.fee)}</td>
       </tr>      
     )
   }
@@ -101,9 +101,9 @@ class AccountTransactionList extends Component {
         </td>
         <td>{EnumToString(TransactionType, tx.type)}</td>
         <td>{moment.unix(tx.created_time).fromNow()}</td>
-        <td>{this.renderAccountLink(getAddressFromAddressHash(tx.data.from))}</td>
+        <td>{this.renderAccountLink(toAddressFromHash(tx.data.from))}</td>
         <td>-</td>
-        <td>{toFixed8(-(tx.data.locks + tx.data.fee))}</td>
+        <td>{toFixed8Str(-(tx.data.locks + tx.data.fee))}</td>
       </tr>
     )
   }
@@ -116,9 +116,9 @@ class AccountTransactionList extends Component {
         </td>
         <td>{EnumToString(TransactionType, tx.type)}</td>
         <td>{moment.unix(tx.created_time).fromNow()}</td>
-        <td>{this.renderAccountLink(getAddressFromAddressHash(tx.data.from))}</td>
+        <td>{this.renderAccountLink(toAddressFromHash(tx.data.from))}</td>
         <td>-</td>
-        <td>{toFixed8(tx.sub_data.lock - tx.data.fee)}</td>
+        <td>{toFixed8Str(tx.sub_data.lock - tx.data.fee)}</td>
       </tr>      
     )
   }
@@ -131,9 +131,9 @@ class AccountTransactionList extends Component {
         </td>
         <td>{EnumToString(TransactionType, tx.type)}</td>
         <td>{moment.unix(tx.created_time).fromNow()}</td>
-        <td>{this.renderAccountLink(getAddressFromAddressHash(tx.data.from))}</td>
+        <td>{this.renderAccountLink(toAddressFromHash(tx.data.from))}</td>
         <td>-</td>
-        <td>{-toFixed8(tx.data.fee)}</td>        
+        <td>{-toFixed8Str(tx.data.fee)}</td>        
       </tr>
     )
   }

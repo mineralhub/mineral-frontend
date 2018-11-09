@@ -16,7 +16,7 @@ import InputPasswordModal from './components/Account/InputPasswordModal';
 import { showKeystoreInputModal, showSendTransactionModal, showLockTransactionModal, showUnlockTransactionModal } from './actions/app';
 import { login } from './actions/account';
 import { toast } from 'react-toastify';
-import { toFixed8Long, encryptKey, decryptString, generateMac } from './common/Blockchain';
+import { toFixed8Long, encryptKey, decryptString, generateMac } from './common/blockchain';
 import SendTransactionModal from './components/Transaction/SendTransactionModal';
 import LockTransactionModal from './components/Transaction/LockTransactionModal';
 import UnlockTransactionModal from './components/Transaction/UnlockTransactionModal';

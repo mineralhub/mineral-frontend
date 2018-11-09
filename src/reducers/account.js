@@ -1,5 +1,5 @@
 import { publicKeyCreate } from 'secp256k1';
-import { getAddressFromPubKey } from '../common/Blockchain';
+import { toAddress } from '../common/blockchain';
 import { LOGIN_WITH_PRIVATE_KEY, LOGOUT, SET_ACCOUNT, SET_ACTIVE_BALANCE } from '../actions/account';
 
 const initialState = {
@@ -22,7 +22,7 @@ export function account(state = initialState, action) {
         active: {
           ...state.active,
           key: action.prikey,
-          address: getAddressFromPubKey(publicKeyCreate(Buffer.from(action.prikey, 'hex'), false)),
+          address: toAddress(publicKeyCreate(Buffer.from(action.prikey, 'hex'), false)),
         }
       }
     }

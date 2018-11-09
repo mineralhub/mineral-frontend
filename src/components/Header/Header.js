@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { showKeystoreInputModal, showSendTransactionModal, showLockTransactionModal, showUnlockTransactionModal } from '../../actions/app';
 import { login, logout, loadActiveBalance } from '../../actions/account';
 import { AccountLink, CreateAccountLink, RegisterDelegateLink } from '../../common/Links';
-import { toFixed8 } from '../../common/Blockchain';
+import { toFixed8Str } from '../../common/blockchain';
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { readFileContentsFromEvent, KEYSTORE_EXTENSION } from '../../common/File';
@@ -81,8 +81,8 @@ class Header extends Component {
     if (active.balance !== undefined) {
       return (
         <div>
-          <Label style={{display:"block"}}>balance : {toFixed8(active.balance)}</Label>
-          <Label style={{display:"block", lineHeight:"0em"}}>lock : {toFixed8(active.lock)}</Label>
+          <Label style={{display:"block"}}>balance : {toFixed8Str(active.balance)}</Label>
+          <Label style={{display:"block", lineHeight:"0em"}}>lock : {toFixed8Str(active.lock)}</Label>
         </div>
       )
     } else {

@@ -1,56 +1,53 @@
-import crypto from 'crypto';
-import RIPEMD160 from 'ripemd160';
-import {encode as bs58Encode} from 'bs58check';
-import {ec as EC} from 'elliptic';
-import scrypt from 'scryptsy';
-import keccak from 'keccak';
+const crypto = require('crypto');
+const RIPEMD160 = require('ripemd160');
+const bs58Encode = require('bs58check').encode;
+const EC = require('elliptic').ec;
+const scrypt = require('scryptsy');
+const keccak = require('keccak');
+const int64 = require('int64-buffer').Int64LE;
+const txTypeStr = [
+  "None", 
+  "RewardTransaction", 
+  "TransferTransaction",
+  "VoteTransaction",
+  "RegisterDelegateTransaction",
+  "OtherSignTransaction",
+  "SignTransaction",
+  "LockTransaction",
+  "UnlockTransaction"
+];
 
-const Int64 = require('int64-buffer').Int64LE;
-
-export const getTxTypeString = (tx) => {
-  switch (tx) {
-    case 1: return "RewardTransaction";
-    case 2: return "TransferTransaction";
-    case 3: return "VoteTransaction";
-    case 4: return "RegisterDelegateTransaction";
-    case 5: return "OtherSignTransaction";
-    case 6: return "SignTransaction";
-    case 7: return "LockTransaction";
-    case 8: return "UnlockTransaction";
-    default: return "Uknown Transaction";
-  }
+module.exports.toTransactionTypeStr = (type) => {
+  if (type < 0 || txTypeStr.length <= type)
+    return txTypeStr[0];
+  return txTypeStr[type];
 }
 
-export const toFixed8 = (v) => {
-  if (isNaN(v)) {
-    return false;
-  }
+module.exports.toFixed8Str = (v) => {
+  if (isNaN(v))
+    return undefined;
   let str = String(v);
-  while (str.length < 9) {
+  while (str.length < 9)
     str = '0' + str;
-  }
-
   return str.slice(0, str.length - 8) + '.' + str.slice(str.length - 8);
 }
 
-export const toFixed8Long = (str) => {
-  if (isNaN(str)) {
+module.exports.toFixed8Long = (str) => {
+  if (isNaN(str))
     return undefined;
-  }
   let idx = str.indexOf('.');
-  let fixedLength = idx === -1 ? 0 : str.length - idx - 1;
-  if (8 < fixedLength) {
+  let fixedLen = idx === -1 ? 0 : str.length - idx - 1;
+  if (8 < fixedLen)
     return undefined;
-  }
   str = str.replace('.', '');
-  while (fixedLength < 8) {
-    str += '0';
-    ++fixedLength;
+  while (fixedLen < 8) {
+    str += '0'
+    ++fixedLen;
   }
-  return new Int64(str);
+  return new int64(str);
 }
 
-export const getPubKeyFromPriKey = (prikey) => {
+module.exports.toPubkey = (prikey) => {
   let ec = new EC('secp256k1');
   let key = ec.keyFromPrivate(prikey, 'bytes');
   let pubkey = key.getPublic();
@@ -68,7 +65,7 @@ export const getPubKeyFromPriKey = (prikey) => {
   return new Buffer(pubkeyhex, 'hex');
 }
 
-export const getAddressFromPubKey = (pubkey) => {
+module.exports.toAddress = (pubkey) => {
   let buf = new Buffer(21);
   buf[0] = 0;
   let sha = crypto.createHash('sha256').update(pubkey).digest();
@@ -77,7 +74,7 @@ export const getAddressFromPubKey = (pubkey) => {
   return bs58Encode(buf);
 }
 
-export const getAddressFromAddressHash = (hash) => {
+module.exports.toAddressFromHash = (hash) => {
   let buf = new Buffer(21);
   buf[0] = 0;
   if (typeof(hash) === 'string') {
@@ -87,7 +84,7 @@ export const getAddressFromAddressHash = (hash) => {
   return bs58Encode(buf); 
 }
 
-export const generatePrivateKey = () => {
+module.exports.generatePrivateKey = () => {
   let ec = new EC('secp256k1');
   let key = ec.genKeyPair();
   let priKey = key.getPrivate();
@@ -98,10 +95,10 @@ export const generatePrivateKey = () => {
   return new Buffer(priKeyHex, "hex");
 }
 
-export const generateAccount = () => {
-  let prikey = generatePrivateKey();
-  let pubkey = getPubKeyFromPriKey(prikey);
-  let address = getAddressFromPubKey(pubkey);
+module.exports.generateAccount = () => {
+  let prikey = this.generatePrivateKey();
+  let pubkey = this.getPubKeyFromPriKey(prikey);
+  let address = this.getAddressFromPubKey(pubkey);
 
   return {
     privateKey : prikey.toString('hex'),
@@ -109,18 +106,17 @@ export const generateAccount = () => {
   }
 }
 
-export const encryptKey = (password, params, alg = "scrypt") => {
-  if (alg === "scrypt") {
+module.exports.encryptKey = (password, params, alg = "scrypt") => {
+  if (alg === "scrypt")
     return scrypt(new Buffer(password, 'utf8'), new Buffer(params.salt, 'hex'), params.n, params.r, params.p, params.dklen);
-  }
   else
     return null;
 }
 
-export const encryptString = (text, key, iv, alg = "aes-128-ctr") => {
+module.exports.encryptString = (text, key, iv, alg = "aes-128-ctr") => {
   if (typeof text === "string")
     text = new Buffer(text, "hex");
-    if (typeof iv === "string")
+  if (typeof iv === "string")
     iv = new Buffer(iv, "hex");
 
   let cipher = crypto.createCipheriv(alg, key.slice(0, 16), iv);
@@ -128,12 +124,12 @@ export const encryptString = (text, key, iv, alg = "aes-128-ctr") => {
   return Buffer.concat([ciphertext, cipher.final()]).toString('hex');
 }
 
-export const generateMac = (text, password) => {
+module.exports.generateMac = (text, password) => {
   let buf = Buffer.concat([password.slice(16, 32), new Buffer(text, 'hex')]);
   return keccak('keccak256').update(buf).digest().toString('hex');
 }
 
-export const decryptString = (text, key, iv, alg = "aes-128-ctr") => {
+module.exports.decryptString = (text, key, iv, alg = "aes-128-ctr") => {
   if (typeof text === "string")
     text = new Buffer(text, "hex");
   if (typeof iv === "string")

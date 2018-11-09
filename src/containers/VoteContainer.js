@@ -11,7 +11,7 @@ import { loadDelegates, SET_DELEGATES_PENDING, SET_DELEGATES_SUCCESS, SET_DELEGA
 import './VoteContainer.css';
 import { ErrorCode } from '../client/nodeClient';
 import { addTransaction } from '../actions/blockchain';
-import { toFixed8Long, isZero } from '../common/Blockchain';
+import { toFixed8Long, isZero } from '../common/blockchain';
 
 export class VoteContainer extends Component {
 	componentDidMount() {
