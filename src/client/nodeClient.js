@@ -1,5 +1,5 @@
 const axios = require('axios');
-var host = process.env.HOST || 'http://127.0.0.1:8080';
+var host = process.env.API_HOST || 'http://127.0.0.1:8080';
 
 module.exports.ErrorCode = {
   E_TX_NOT_ENOUGH_LOCKBALANCE: 2000,

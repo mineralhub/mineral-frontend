@@ -9,7 +9,7 @@ export class HomeContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      socket : io('http://localhost:3001')
+      socket : io(process.env.SOCKET_HOST || 'http://localhost:3001')
     };
     const {dispatch} = this.props;
     dispatch(loadBlocks(this.state.socket));
