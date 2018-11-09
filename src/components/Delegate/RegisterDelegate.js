@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { Input, Label, Button } from 'reactstrap';
-import { Config } from '../../common/Config';
+import { Config } from './../../config';
 
 class RegisterDelegate extends Component {
   constructor(props) {
