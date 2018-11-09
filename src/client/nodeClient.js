@@ -1,7 +1,7 @@
 const axios = require('axios');
-var host = 'http://127.0.0.1:8080';
+var host = process.env.HOST || 'http://127.0.0.1:8080';
 
-exports.ErrorCode = {
+module.exports.ErrorCode = {
   E_TX_NOT_ENOUGH_LOCKBALANCE: 2000,
   E_TX_NO_LOCK_BALANCE: 2001,
   E_TX_LOCK_VALUE_CANNOT_NEGATIVE: 2002,
@@ -14,7 +14,7 @@ exports.ErrorCode = {
   E_TX_DELEGATE_ALREADY_REGISTER: 2201
 }
 
-exports.loadBalance = (address) => {
+module.exports.loadBalance = (address) => {
   return new Promise((resolve, reject) => {
     axios.get(`${host}/account/balance/${address}`)
     .then((res) => {
@@ -26,7 +26,7 @@ exports.loadBalance = (address) => {
   });
 }
 
-exports.loadAccount = (address) => {
+module.exports.loadAccount = (address) => {
   return new Promise((resolve, reject) => {
     axios.get(`${host}/account/${address}`)
     .then((res) => {
@@ -38,7 +38,7 @@ exports.loadAccount = (address) => {
   });
 }
 
-exports.loadTransaction = (hash) => {
+module.exports.loadTransaction = (hash) => {
   return new Promise((resolve, reject) => {
     axios.get(`${host}/transaction/${hash}`)
     .then((res) => {
@@ -50,7 +50,7 @@ exports.loadTransaction = (hash) => {
   });
 }
 
-exports.loadTransactionFromAddress = (address, page) => {
+module.exports.loadTransactionFromAddress = (address, page) => {
   return new Promise((resolve, reject) => {
     axios.get(`${host}/transaction/${address}/${page}`)
     .then((res) => {
@@ -62,7 +62,7 @@ exports.loadTransactionFromAddress = (address, page) => {
   });
 }
 
-exports.loadBlock = (height) => {
+module.exports.loadBlock = (height) => {
   return new Promise((resolve, reject) => {
     axios.get(`${host}/block/${height}`)
     .then((res) => {
@@ -74,7 +74,7 @@ exports.loadBlock = (height) => {
   });
 }
 
-exports.loadDelegates = () => {
+module.exports.loadDelegates = () => {
   return new Promise((resolve, reject) => {
     axios.get(`${host}/delegate/all`)
     .then((res) => {
@@ -86,7 +86,7 @@ exports.loadDelegates = () => {
   });
 }
 
-exports.addTransaction = (bytes) => {
+module.exports.addTransaction = (bytes) => {
   return new Promise((resolve, reject) => {
     axios.post(`${host}/transaction/add`, { 
       bytes: bytes
