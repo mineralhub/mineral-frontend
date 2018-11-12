@@ -1,7 +1,7 @@
 const Int64 = require('int64-buffer').Int64LE;
-const base58Check = require('bs58check');
 const EC = require('elliptic').ec;
 const crypto = require('crypto');
+const blockchain = require('./blockchain');
 
 var TransactionType = {
   None: 0,
@@ -27,15 +27,6 @@ var EnumToString = (e, v) => {
   return null;
 }
 
-var addrToHash = (addr) => {
-  let buf = base58Check.decode(addr);
-  if (buf.length !== 21)
-    return null;
-  let result = Buffer.alloc(20);
-  buf.copy(result, 0, 1, 21);
-  return result;
-}
-
 class TransactionBase {
   constructor(from) {
     this.fee = new Int64(DefaultFee); // 8 byte (Fixed8)
@@ -49,7 +40,7 @@ class TransactionBase {
   toBuffer() {
     let buf = Buffer.alloc(28);
     this.fee.toBuffer().copy(buf, 0);
-    addrToHash(this.from).copy(buf, 8);
+    blockchain.toAddressHash(this.from).copy(buf, 8);
     return buf;
   }
 }
@@ -89,7 +80,7 @@ class TransferTransaction extends TransactionBase {
     buf.writeInt32LE(Object.keys(this.to).length, cursor);
     cursor += 4;
     for (let addr in this.to) {
-      addrToHash(addr).copy(buf, cursor);
+      blockchain.toAddressHash(addr).copy(buf, cursor);
       cursor += 20;
       this.to[addr].toBuffer().copy(buf, cursor);
       cursor += 8;
@@ -117,7 +108,7 @@ class VoteTransaction extends TransactionBase {
     buf.writeInt32LE(Object.keys(this.votes).length, cursor);
     cursor += 4;
     for (let addr in this.votes) {
-      addrToHash(addr).copy(buf, cursor);
+      blockchain.toAddressHash(addr).copy(buf, cursor);
       cursor += 20;
       this.votes[addr].toBuffer().copy(buf, cursor);
       cursor += 8;
@@ -180,7 +171,7 @@ class OtherSignTransaction extends TransactionBase {
     buf.writeInt32LE(this.to.length, cursor);
     cursor += 4;
     for (let addr in this.to) {
-      addrToHash(addr).copy(buf, cursor);
+      blockchain.toAddressHash(addr).copy(buf, cursor);
       cursor += 20;
       this.to[addr].toBuffer().copy(buf, cursor);
       cursor += 8;      

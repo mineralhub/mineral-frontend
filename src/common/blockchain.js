@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const RIPEMD160 = require('ripemd160');
-const bs58Encode = require('bs58check').encode;
+const base58Check = require('bs58check');
 const EC = require('elliptic').ec;
 const scrypt = require('scryptsy');
 const keccak = require('keccak');
@@ -71,7 +71,7 @@ module.exports.toAddress = (pubkey) => {
   let sha = crypto.createHash('sha256').update(pubkey).digest();
   let rip = new RIPEMD160().update(sha).digest();
   rip.copy(buf, 1, 0, 20);
-  return bs58Encode(buf);
+  return base58Check.encode(buf);
 }
 
 module.exports.toAddressFromHash = (hash) => {
@@ -81,7 +81,16 @@ module.exports.toAddressFromHash = (hash) => {
     hash = Buffer.from(hash, 'hex');
   }
   hash.copy(buf, 1, 0, 20);
-  return bs58Encode(buf); 
+  return base58Check.encode(buf); 
+}
+
+module.exports.toAddressHash = (address) => {
+  let buf = base58Check.decode(address);
+  if (buf.length !== 21)
+    return null;
+  let result = Buffer.alloc(20);
+  buf.copy(result, 0, 1, 21);
+  return result;
 }
 
 module.exports.generatePrivateKey = () => {
