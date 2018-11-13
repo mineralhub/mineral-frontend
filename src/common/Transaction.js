@@ -5,7 +5,7 @@ const blockchain = require('./blockchain');
 
 var TransactionType = {
   None: 0,
-  Reward: 1,
+  Supply: 1,
   Transfer: 2,
   Vote: 3,
   RegisterDelegate: 4,
@@ -45,10 +45,10 @@ class TransactionBase {
   }
 }
 
-class RewardTransaction extends TransactionBase {
+class SupplyTransaction extends TransactionBase {
   constructor(from) {
     super(from);
-    this.reward = undefined; // 8 byte (Fixed8)
+    this.supply = undefined; // 8 byte (Fixed8)
   }
 
   size() {
@@ -57,7 +57,7 @@ class RewardTransaction extends TransactionBase {
 
   toBuffer() {
     let buf = Buffer.alloc(this.size(), super.toBuffer());
-    this.reward.toBuffer().copy(buf, super.size());
+    this.supply.toBuffer().copy(buf, super.size());
     return buf;
   }
 }
@@ -304,7 +304,7 @@ module.exports = {
   TransactionType,
   EnumToString,
   TransactionBase,
-  RewardTransaction,
+  SupplyTransaction,
   TransferTransaction,
   VoteTransaction,
   RegisterDelegateTransaction,

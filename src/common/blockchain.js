@@ -7,7 +7,7 @@ const keccak = require('keccak');
 const int64 = require('int64-buffer').Int64LE;
 const txTypeStr = [
   "None", 
-  "RewardTransaction", 
+  "SupplyTransaction", 
   "TransferTransaction",
   "VoteTransaction",
   "RegisterDelegateTransaction",
@@ -66,6 +66,9 @@ module.exports.toPubkey = (prikey) => {
 }
 
 module.exports.toAddress = (pubkey) => {
+  if (typeof(pubkey) === 'string') {
+    pubkey = Buffer.from(pubkey, 'hex');
+  }
   let buf = Buffer.alloc(21);
   buf[0] = 0;
   let sha = crypto.createHash('sha256').update(pubkey).digest();
@@ -75,11 +78,11 @@ module.exports.toAddress = (pubkey) => {
 }
 
 module.exports.toAddressFromHash = (hash) => {
-  let buf = Buffer.alloc(21);
-  buf[0] = 0;
   if (typeof(hash) === 'string') {
     hash = Buffer.from(hash, 'hex');
   }
+  let buf = Buffer.alloc(21);
+  buf[0] = 0;
   hash.copy(buf, 1, 0, 20);
   return base58Check.encode(buf); 
 }
