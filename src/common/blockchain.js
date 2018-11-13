@@ -1,13 +1,13 @@
 const crypto = require('crypto');
 const RIPEMD160 = require('ripemd160');
-const bs58Encode = require('bs58check').encode;
+const base58Check = require('bs58check');
 const EC = require('elliptic').ec;
 const scrypt = require('scryptsy');
 const keccak = require('keccak');
 const int64 = require('int64-buffer').Int64LE;
 const txTypeStr = [
   "None", 
-  "RewardTransaction", 
+  "SupplyTransaction", 
   "TransferTransaction",
   "VoteTransaction",
   "RegisterDelegateTransaction",
@@ -66,22 +66,34 @@ module.exports.toPubkey = (prikey) => {
 }
 
 module.exports.toAddress = (pubkey) => {
+  if (typeof(pubkey) === 'string') {
+    pubkey = Buffer.from(pubkey, 'hex');
+  }
   let buf = Buffer.alloc(21);
   buf[0] = 0;
   let sha = crypto.createHash('sha256').update(pubkey).digest();
   let rip = new RIPEMD160().update(sha).digest();
   rip.copy(buf, 1, 0, 20);
-  return bs58Encode(buf);
+  return base58Check.encode(buf);
 }
 
 module.exports.toAddressFromHash = (hash) => {
-  let buf = Buffer.alloc(21);
-  buf[0] = 0;
   if (typeof(hash) === 'string') {
     hash = Buffer.from(hash, 'hex');
   }
+  let buf = Buffer.alloc(21);
+  buf[0] = 0;
   hash.copy(buf, 1, 0, 20);
-  return bs58Encode(buf); 
+  return base58Check.encode(buf); 
+}
+
+module.exports.toAddressHash = (address) => {
+  let buf = base58Check.decode(address);
+  if (buf.length !== 21)
+    return null;
+  let result = Buffer.alloc(20);
+  buf.copy(result, 0, 1, 21);
+  return result;
 }
 
 module.exports.generatePrivateKey = () => {

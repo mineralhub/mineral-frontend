@@ -6,11 +6,11 @@ import { TransactionLink, AccountLink, BlockLink } from '../../common/Links';
 import moment from 'moment';
 
 class Transaction extends Component {
-  renderReward = (transaction) => {
+  renderSupply = (transaction) => {
     return (
       <dl className="row">
         <dt className="col col-sm-3">To:</dt>
-        <dd className="col col-sm-9">{toFixed8Str(transaction.data.reward)}</dd>
+        <dd className="col col-sm-9">{toFixed8Str(transaction.data.supply)}</dd>
       </dl>
     );
   }
@@ -76,8 +76,8 @@ class Transaction extends Component {
 
   renderTransactionData = (transaction) => {
     switch (transaction.type) {
-      case TransactionType.Reward:
-        return this.renderReward(transaction);
+      case TransactionType.Supply:
+        return this.renderSupply(transaction);
       case TransactionType.Transfer:
         return this.renderTransfer(transaction);
       case TransactionType.RegisterDelegate:
